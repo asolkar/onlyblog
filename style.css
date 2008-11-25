@@ -1,0 +1,124 @@
+/* Style for PHP Labs */
+body {
+  font-family : "Trebuchet MS", sans-serif;
+  font-size : small;
+  background-color : white;
+}
+
+h1 {
+  text-align : center;
+}
+
+.error {
+  font-weight : bold;
+  color : #770000;
+  text-align : center;
+}
+.status {
+  font-weight : bold;
+  color : #007700;
+  text-align : center;
+}
+.info {
+  font-weight : bold;
+  color : #000077;
+  text-align : center;
+}
+.message {
+  display : table;
+  margin-left : auto;
+  margin-right : auto;
+  border : thin solid #cccccc;
+  padding : 5px 5px 5px 5px;
+}
+
+/* Forms */
+.panel {
+  display : table;
+  margin-left : auto;
+  margin-right : auto;
+  margin-bottom : 5px;
+  margin-top : 5px;
+}
+.panel_header {
+  text-align : center;
+  font-weight : bold;
+  line-height : 2em;
+  color : white;
+  background-color : #aaaaaa;
+  border : thin solid #aaaaaa;
+  margin-bottom : 1px;
+}
+.entry_form {
+  padding : 5px 5px 5px 5px;
+}
+.form_field {
+  margin : 0 auto;
+  padding : 3px;
+  border : solid thin #cccccc;
+  overflow : auto;
+}
+.form_field .form_field_name,
+.form_field .form_field_input {
+  float : left;
+  margin : 0 auto;
+}
+.form_field .form_field_name {
+  width : 200px;
+  font-weight : bold;
+}
+.form_field .form_field_input {
+  margin-left : 5px;
+  margin-right : 10px;
+}
+.sep {
+  clear : both;
+  line-height : 1px;
+}
+
+.info_cntnr {
+  /*display : table;*/
+  Width : 600px;
+  margin-left : auto;
+  margin-right : auto;
+  margin-bottom : 5px;
+  margin-top : 5px;
+  border : thin solid #bbbbbb;
+  -moz-border-radius : 6px 6px 0px 0px;
+}
+.info_cntnr_header {
+  text-align : left;
+  font-weight : bold;
+  line-height : 2em;
+  color : black;
+  background-color : #bbbbbb;
+  border : thin solid #bbbbbb;
+  margin-bottom : 1px;
+  -moz-border-radius : 6px 6px 0px 0px;
+}
+.info_cntnr_cont {
+  padding : 8px;
+}
+.info_bit {
+  padding-left : 8px;
+  padding-right : 8px;
+}
+
+.srch_cntnr {
+  Width : 600px;
+  margin-left : auto;
+  margin-right : auto;
+  margin-bottom : 5px;
+  margin-top : 5px;
+  border : thin solid #bbbbbb;
+  background-color : #dddddd;
+  font-weight : bold;
+  line-height : 2em;
+  -moz-border-radius : 6px 6px 6px 6px;
+}
+.srch_bit {
+  padding-left : 8px;
+  padding-right : 8px;
+  padding-top : 4px;
+  padding-bottom : 4px;
+}

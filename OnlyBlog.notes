@@ -1,0 +1,39 @@
+[Blog installation]
+
+* Blog will be installed centrally on a server. Users can use
+  'personalization' to make an instance that suits them
+* As such, there is a 'OnlyBlog' area, where all the blog
+  infrastructure files are installed. Then there are user areas
+  where users have their specific configuration files and blog
+  data files
+
+[Blog data organization]
+
+* simple text files with a specified extension (default, .blog)
+* All files can be in one directory, or in a hierarchy. However,
+  the hierarchy has no significance. It is only for easier
+  management of files
+
+[Blog file structure]
+
+* Metax data sits in the header of a blog file
+* Content follows the metadata section
+* Metadata and content are separated by '+-+-+' separator
+* Metadata:
+  - Tags: tag1,tag2,tag3, tag4
+  - Published: MM/DD/YYYY HH:MM:SS
+    This field is empty to begin with. If the author wants to
+    publish it, this field should contain publishing date. Entry
+    will not be displayed in the blog if the field is empty.
+* Content:
+  - First line of the content is the heading
+  - Rest of the file is free formatting. It can include HTML
+    syntax. HTML will be displayed as in the file.
+
+[Themeing]
+
+* All classes and ids used in base OnlyBlog library will be
+  documented. Themes can use these to format the output
+* A user stylesheet file will be allowed to be specified via
+  blog configuration to allow non-theme styling. All non-theme
+  styles must reside inside '.user_style' class.

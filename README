@@ -1,0 +1,7 @@
+Only is a low system requirement, simple, light, open source blogging platform.
+It does not require a database engine. It works off of text files that can be
+edited in your favorite text editor - a la bloxsom.
+
+Requirements:
+  Web server
+  PHP5+
