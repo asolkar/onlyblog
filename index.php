@@ -3,27 +3,13 @@
 //
 // Include library of functions
 //
-include ("lib/onlyblog.inc");
-include ("config.inc");
+include 'lib/config.inc';
+include 'config.inc';
+include 'lib/onlyblog.inc';
 
-//
-// Handle requests
-//
-$page = "";
-
-if (isset ($_POST['action'])) {
-} else {
-  if (isset ($_GET['action'])) {
-  } else {
-    $page .= "<h1>Serenity here...</h1>";
-  }
-}
-
+blog_init();
 ?>
 <?php
-//
-// Display a page
-//
 
 echo '<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -32,13 +18,11 @@ echo '<?xml version="1.0" encoding="utf-8"?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<?php
-  echo "<title> OnlyBlog </title>\n";
-?>
+  <title><?php echo $__status['page_title'] ?></title>
   </title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-  <link rel="StyleSheet" href="/style.css" type="text/css" title="MMA Library Design Style">
+  <link rel="StyleSheet" href="<?php echo $__config['css_file'] ?>" type="text/css" title="Design Style">
 
   <script type="text/javascript" language="javascript" src="Library.js" />
   <script type="text/javascript">
@@ -46,17 +30,10 @@ echo '<?xml version="1.0" encoding="utf-8"?>
   //]]>
   </script>
 </head>
-
 <body>
+<h1><?php echo $__config['blog_name'] ?></h1>
 <?php
-echo $page;
-
-$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('data'));
-
-foreach($files as $file) {
-  echo "$file<br>\n";
-}
+ get_post_list()
 ?>
-
 </body>
 </html>
