@@ -122,3 +122,10 @@ h1, h2, h3 {
   padding-top : 4px;
   padding-bottom : 4px;
 }
+
+.header_tag {
+  background-color : #cccccc;
+  display : inline;
+  padding : 1px 3px 1px 3px;
+  -moz-border-radius : 0.5em;
+}

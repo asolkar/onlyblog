@@ -11,8 +11,8 @@ function page_header () {
 
   echo <<<END
     <div id="page_header">
-      <dif id="blog_name"><h1>{$__config['blog_name']}</h1></dif>
-      <dif id="blog_tag_line"><h3>{$__config['blog_tag_line']}</h3></dif>
+      <div id="blog_name"><h1>{$__config['blog_name']}</h1></div>
+      <div id="blog_tag_line"><h3>{$__config['blog_tag_line']}</h3></div>
     </div>
 END;
 }

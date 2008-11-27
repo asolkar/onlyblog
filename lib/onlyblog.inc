@@ -37,6 +37,9 @@ function get_post_list() {
   //
   find_blog_data_files ();
 
+  echo <<<END
+  <div class='entry_list'>
+END;
   foreach ($__blog_data_files as $data_file) {
     $post = file_get_contents ($__config['blog_data_dir'] . '/' . $data_file);
 
@@ -71,6 +74,9 @@ function get_post_list() {
     </div>
 END;
   }
+  echo <<<END
+  </div>
+END;
 }
 
 function transform_text ($entry) {
