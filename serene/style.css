@@ -1,131 +1,109 @@
+/*
+
+  Copyright 2008 Mahesh Asolkar
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+*/
+
 /* Style for PHP Labs */
 body {
-  font-family : "Trebuchet MS", sans-serif;
+  font-family : Georgia, "Bitstream Vera Serif", "Times New Roman", serif;
   font-size : small;
   background-color : white;
+  text-align : center;
 }
 
 h1, h2, h3 {
   text-align : center;
 }
 
-.error {
-  font-weight : bold;
-  color : #770000;
-  text-align : center;
-}
-.status {
-  font-weight : bold;
-  color : #007700;
-  text-align : center;
-}
-.info {
-  font-weight : bold;
-  color : #000077;
-  text-align : center;
-}
-.message {
-  display : table;
-  margin-left : auto;
-  margin-right : auto;
-  border : thin solid #cccccc;
-  padding : 5px 5px 5px 5px;
-}
-
-/* Forms */
-.panel {
-  display : table;
-  margin-left : auto;
-  margin-right : auto;
-  margin-bottom : 5px;
-  margin-top : 5px;
-}
-.panel_header {
-  text-align : center;
-  font-weight : bold;
-  line-height : 2em;
-  color : white;
-  background-color : #aaaaaa;
-  border : thin solid #aaaaaa;
-  margin-bottom : 1px;
-}
-.entry_form {
-  padding : 5px 5px 5px 5px;
-}
-.form_field {
+.entry_list {
+  width : 600px;
   margin : 0 auto;
-  padding : 3px;
-  border : solid thin #cccccc;
-  overflow : auto;
-}
-.form_field .form_field_name,
-.form_field .form_field_input {
-  float : left;
-  margin : 0 auto;
-}
-.form_field .form_field_name {
-  width : 200px;
-  font-weight : bold;
-}
-.form_field .form_field_input {
-  margin-left : 5px;
-  margin-right : 10px;
-}
-.sep {
-  clear : both;
-  line-height : 1px;
-}
-
-.info_cntnr {
-  /*display : table;*/
-  Width : 600px;
-  margin-left : auto;
-  margin-right : auto;
-  margin-bottom : 5px;
-  margin-top : 5px;
-  border : thin solid #bbbbbb;
-  -moz-border-radius : 6px 6px 0px 0px;
-}
-.info_cntnr_header {
   text-align : left;
-  font-weight : bold;
-  line-height : 2em;
-  color : black;
-  background-color : #bbbbbb;
-  border : thin solid #bbbbbb;
-  margin-bottom : 1px;
-  -moz-border-radius : 6px 6px 0px 0px;
-}
-.info_cntnr_cont {
-  padding : 8px;
-}
-.info_bit {
-  padding-left : 8px;
-  padding-right : 8px;
+  padding-bottom : 10px;
+  border-bottom : thin solid #eeeeee;
 }
 
-.srch_cntnr {
-  Width : 600px;
-  margin-left : auto;
-  margin-right : auto;
-  margin-bottom : 5px;
-  margin-top : 5px;
-  border : thin solid #bbbbbb;
-  background-color : #dddddd;
-  font-weight : bold;
-  line-height : 2em;
-  -moz-border-radius : 6px 6px 6px 6px;
-}
-.srch_bit {
-  padding-left : 8px;
-  padding-right : 8px;
-  padding-top : 4px;
-  padding-bottom : 4px;
+/* Header formatting */
+.entry_header {
+  font-family : "Trebuchet MS", sans-serif;
+  border-bottom : thin solid #eeeeee;
+  overflow : auto;
+  margin : 0 auto;
+  padding-bottom : 10px;
 }
 
-.header_tag {
-  background-color : #cccccc;
+.header_title,
+.header_author,
+.header_tags,
+.header_other {
   display : inline;
-  padding : 1px 3px 1px 3px;
-  -moz-border-radius : 0.5em;
+}
+.header_type {
+  display : none;
+}
+.header_value {
+  display : inline;
+}
+
+.header_title {
+  display : block;
+  width : 100%;
+}
+.header_title .header_value {
+  display : block;
+  font-size : 1.8em;
+}
+
+.header_author {
+  float : left;
+}
+.header_author .header_value a {
+  text-decoration : none;
+  color : #77aa77;
+}
+.header_author .header_value a:hover {
+  text-decoration : underline;
+}
+
+.header_tags {
+  float : right;
+}
+.header_tags .header_value {
+  font-size : 0.8em;
+  padding-right : 10px;
+}
+.header_tag {
+  display : inline;
+  padding-left : 5px;
+  font-weight : bold;
+  color : #aaaaaa;
+}
+
+.header_body_separator {
+  clear : both;
+  padding : 3px;
+}
+
+/* Entry formatting */
+.entry {
+  padding-top : 10px;
+}
+
+/* Serene theme related formatting */
+#page_footer {
+  font-family : "Trebuchet MS", sans-serif;
+  font-size : 0.8em;
 }

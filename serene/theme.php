@@ -1,4 +1,21 @@
 <?php
+//  Copyright 2008 Mahesh Asolkar
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+
+//
+// Serene Theme functions
+//
 
 function http_doc_type() {
   echo '<?xml version="1.0" encoding="utf-8"?>
@@ -21,7 +38,9 @@ function page_footer () {
 
   echo <<<END
     <div id="page_footer">
-      {$__config['blog_name']} is an OnlyBlog blog using the Serene theme.
+      <a href="/">{$__config['blog_name']}</a> is
+      an <a href="http://onlyblog.googlecode.com/">OnlyBlog</a> blog
+      using the Serene theme.
     </div>
 END;
 }

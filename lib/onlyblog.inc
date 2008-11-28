@@ -1,4 +1,18 @@
 <?php
+//  Copyright 2008 Mahesh Asolkar
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+
 //
 // OnlyBlog Library
 //
@@ -67,15 +81,16 @@ END;
     <div class='entry'>
       <div class='entry_header'>
         $header
-      </div>
+      </div><!-- entry_header -->
+      <br class="header_body_separator">
       <div class='entry_body'>
         $entry
-      </div>
-    </div>
+      </div><!-- entry_body -->
+    </div><!-- entry -->
 END;
   }
   echo <<<END
-  </div>
+  </div><!-- entry_list -->
 END;
 }
 
@@ -110,7 +125,7 @@ function format_header_part ($part) {
   //
   if ($type == "Title") {
     $output .= <<<END
-    <div class='header_part' id='header_title'>
+    <div class='header_title'>
       <div class='header_type'>$type</div>
       <div class='header_value'>$value</div>
     </div>
@@ -125,7 +140,7 @@ END;
     }
 
     $output .= <<<END
-    <div class='header_part' id='header_author'>
+    <div class='header_author'>
       <div class='header_type'>$type</div>
       <div class='header_value'>$value</div>
     </div>
@@ -149,7 +164,7 @@ END;
     $value = implode (', ', $tags);
 
     $output .= <<<END
-    <div class='header_part' id='header_tags'>
+    <div class='header_tags'>
       <div class='header_type'>$type</div>
       <div class='header_value'>$value</div>
     </div>
@@ -159,7 +174,7 @@ END;
   //
   } else {
     $output .= <<<END
-    <div class='header_part' id='header_other'>
+    <div class='header_other'>
       <div class='header_type'>$type</div>
       <div class='header_value'>$value</div>
     </div>
