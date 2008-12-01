@@ -20,15 +20,12 @@
 body {
   font-family : Georgia, "Bitstream Vera Serif", "Times New Roman", serif;
   font-size : small;
+  line-height : 1.6em;
   background-color : white;
   text-align : center;
 }
 
-h1, h2, h3 {
-  text-align : center;
-}
-
-.entry_list {
+#shrink_wrapper {
   width : 600px;
   margin : 0 auto;
   text-align : left;
@@ -36,7 +33,44 @@ h1, h2, h3 {
   border-bottom : thin solid #eeeeee;
 }
 
+a, a:visited {
+  text-decoration : none;
+  color : #558855;
+  background-color : #eeeeee;
+}
+a:hover {
+  text-decoration : underline;
+}
+
+.entry_list {
+  width : 600px;
+  margin : 0 auto;
+  border-top : thin solid #77aa77;
+  text-align : left;
+  padding-bottom : 10px;
+  border-bottom : thin solid #eeeeee;
+}
+
 /* Header formatting */
+#page_header a,
+#page_header h1 {
+  font-family : "Trebuchet MS", sans-serif;
+  text-align : center;
+  font-size : xx-large;
+  font-weight : bold;
+  line-height : 1.8em;
+  color : black;
+  text-decoration : none;
+}
+#page_header h2 {
+  font-family : "Trebuchet MS", sans-serif;
+  text-align : center;
+  font-size : medium;
+  font-weight : bold;
+  font-style : italic;
+  line-height : 1.8em;
+}
+
 .entry_header {
   font-family : "Trebuchet MS", sans-serif;
   border-bottom : thin solid #eeeeee;
@@ -60,18 +94,32 @@ h1, h2, h3 {
 
 .header_title {
   display : block;
-  width : 100%;
+  width : 99%;
 }
-.header_title .header_value {
+/*.header_title .header_value,
+.header_title .header_value h3,*/
+.header_title .header_value a {
+  color : #aa4400;
   display : block;
-  font-size : 1.8em;
+  font-size : 1.5em;
+  font-weight : bold;
+  line-height : 2.3em;
+  text-decoration : none;
+  background-color : transparent;
+}
+.header_title .header_value a:hover {
+  text-decoration: underline;
 }
 
 .header_author {
   float : left;
+  height : 20px;
+  padding-left : 20px;
+  background : url(icons/user.png) no-repeat;
 }
 .header_author .header_value a {
   text-decoration : none;
+  background-color : transparent;
   color : #77aa77;
 }
 .header_author .header_value a:hover {
@@ -80,16 +128,24 @@ h1, h2, h3 {
 
 .header_tags {
   float : right;
+  height : 20px;
+  padding-left : 20px;
+  background : url(icons/tag_green.png) no-repeat;
 }
 .header_tags .header_value {
-  font-size : 0.8em;
   padding-right : 10px;
 }
 .header_tag {
   display : inline;
-  padding-left : 5px;
-  font-weight : bold;
   color : #aaaaaa;
+}
+.header_tag a {
+  text-decoration : none;
+  background-color : transparent;
+  color : #aaaaaa;
+}
+.header_tag a:hover {
+  text-decoration : underline;
 }
 
 .header_body_separator {
@@ -101,9 +157,22 @@ h1, h2, h3 {
 .entry {
   padding-top : 10px;
 }
+.entry blockquote {
+  font-family : "Trebuchet MS", sans-serif;
+  border-left : 5px solid #cccccc;
+  margin : 10px;
+  padding : 5px 10px 5px 10px;
+}
+pre {
+  border : thin dashed #cccccc;
+  background-color : #eeeeee;
+  margin : 10px;
+  padding : 5px 10px 5px 10px;
+}
 
 /* Serene theme related formatting */
 #page_footer {
   font-family : "Trebuchet MS", sans-serif;
   font-size : 0.8em;
+  text-align : center;
 }

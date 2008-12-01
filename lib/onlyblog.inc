@@ -20,7 +20,7 @@
 $__status['page_type']          = 'index';
 $__status['page_title']         = 'New OnlyBlog';
 
-$__blog_data_files              = array();
+$__blog_data_items              = array();
 
 //
 // Handle requests
@@ -32,9 +32,14 @@ function blog_init () {
   //
   // Handle requests
   //
-  if (isset ($_POST['action'])) {
+  if (isset ($_GET['post'])) {
+    $__status['page_type'] = 'single_post';
+    $__status['data_file'] = $_GET['post'];
+  } elseif (isset ($_GET['tag'])) {
+    $__status['page_type'] = 'tagged_posts';
+    $__status['tag'] = $_GET['tag'];
   } else {
-    if (isset ($_GET['action'])) {
+    if (isset ($_POST['action'])) {
     } else {
       // Page type is 'main'
     }
@@ -42,37 +47,35 @@ function blog_init () {
 }
 
 function get_post_list() {
-  global $__blog_data_files;
+  global $__blog_data_items;
   global $__config;
 
   //
-  // Populate the $__blog_data_files array with qualifying blog data
+  // Populate the $__blog_data_items array with qualifying blog data
   // file names
   //
   find_blog_data_files ();
 
+  //
+  // Refine the list based on query
+  //
+  refine_data_items ();
+
   echo <<<END
   <div class='entry_list'>
 END;
-  foreach ($__blog_data_files as $data_file) {
-    $post = file_get_contents ($__config['blog_data_dir'] . '/' . $data_file);
-
-    //
-    // The first occurance of '--' separates the header and entry in a post
-    //
-    list ($header, $entry) = preg_split ('/^--$/ms', $post, 2);
-
+  foreach ($__blog_data_items as $data_item) {
     //
     // Get the display version of the raw entry text
     //
     if ($__config['transform_text'] == 1) {
-      $entry = transform_text ($entry);
+      $entry = transform_text ($data_item['entry']);
     }
 
     //
     // Get the display version of the raw header text
     //
-    $header = format_header ($header);
+    $header = format_header ($data_item);
 
     //
     // Display the post
@@ -100,68 +103,45 @@ function transform_text ($entry) {
   return $entry;
 }
 
-function format_header ($header) {
+function format_header ($data_item) {
   $output = "";
 
-  $parts = preg_split ('/\n/', $header);
+  $parts = preg_split ('/\n/', $data_item['header']);
 
-  foreach ($parts as $part) {
-    if (!preg_match ('/^\s*$/', $part)) {
-      $output .= format_header_part($part);
-    }
-  }
-  return $output;
-}
-
-function format_header_part ($part) {
-  $output = "";
-
-  list ($type, $value) = preg_split ('/:/', $part, 2);
-  $type = preg_replace (array ('/^\s+/','/\s+$/'), '', $type);
-  $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
-
-  //
-  // Title does not require any transformation
-  //
-  if ($type == "Title") {
+  if (isset ($data_item['header_title'])) {
     $output .= <<<END
     <div class='header_title'>
-      <div class='header_type'>$type</div>
-      <div class='header_value'>$value</div>
+      <div class='header_type'>Title</div>
+      <div class='header_value'><a href='/?post={$data_item['data_file']}'>
+        <h3>{$data_item['header_title']}</h3></a></div>
     </div>
 END;
-  //
-  // If email is provided, make the author name a 'mailto:'
-  // hyperlink. Otherwise, just display the name
-  //
-  } elseif ($type == "Author") {
-    if (preg_match ('/(.*?)\s*<\s*(.*?@.*)\s*>/', $value, $author_info)) {
-      $value = '<a href="mailto:' . $author_info[2] . '">' . $author_info[1] . '</a>';
+  } else {
+    echo "<b>No title<>/b>";
+  }
+  if (isset ($data_item['header_author'])) {
+    $author = $data_item['header_author'];
+    if (isset ($data_item['header_author_email'])) {
+      $author = '<a href="mailto:' . $data_item['header_author_email'] . '">'
+                . $data_item['header_author'] . '</a>';
     }
-
     $output .= <<<END
     <div class='header_author'>
-      <div class='header_type'>$type</div>
-      <div class='header_value'>$value</div>
+      <div class='header_type'>Author</div>
+      <div class='header_value'>$author</div>
     </div>
 END;
-  //
-  // Tags is a comma-separated list. Display the tags. Later,
-  // each tag will be a hyperlink to a tag-filter url
-  //
-  } elseif ($type == "Tags") {
-    $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
-    $tags = preg_split ('/\s*,\s*/', $value);
+  }
+  if (isset ($data_item['header_tags'])) {
+    $tag_values = array();
 
-    //
-    // Use a referenced foreach, since we want to modify the array
-    //
-    foreach ($tags as &$tag) {
-      $tag = "<div class='header_tag'>" . $tag . "</div>";
+    foreach ($data_item['header_tags'] as $tag) {
+      array_push ($tag_values,
+                  "<div class='header_tag'><a href='/?tag={$tag}'" .
+                  " title='Show all posts tagged {$tag}'>" . $tag . "</a></div>");
     }
-    unset ($tag);
 
-    $value = implode (', ', $tags);
+    $value = implode (', ', $tag_values);
 
     $output .= <<<END
     <div class='header_tags'>
@@ -169,23 +149,15 @@ END;
       <div class='header_value'>$value</div>
     </div>
 END;
-  //
-  // All the other (yet unknown) headers are displayed as they are.
-  //
-  } else {
-    $output .= <<<END
-    <div class='header_other'>
-      <div class='header_type'>$type</div>
-      <div class='header_value'>$value</div>
-    </div>
-END;
   }
+
   return $output;
 }
 
 function find_blog_data_files () {
   global $__config;
-  global $__blog_data_files;
+  global $__blog_data_items;
+  global $__status;
 
   $data_dir = $__config['blog_data_dir'];
 
@@ -205,11 +177,74 @@ function find_blog_data_files () {
           // We just found a blog data file. Now process it.
           //
           $stat = lstat ($data_file);
-          $__blog_data_files[$stat['ctime']] = $file;
+          $__blog_data_items[$stat['ctime']]['data_file'] = $file;
+
+          $post = file_get_contents ($__config['blog_data_dir'] . '/' . $file);
+
+          //
+          // The first occurance of '--' separates the header and entry in a post
+          //
+          list ($__blog_data_items[$stat['ctime']]['header'],
+                $__blog_data_items[$stat['ctime']]['entry'])
+            = preg_split ('/^--$/ms', $post, 2);
+
+          //
+          // Gather header data
+          //
+          $parts = preg_split ('/\n/', $__blog_data_items[$stat['ctime']]['header']);
+
+          foreach ($parts as $part) {
+            if (!preg_match ('/^\s*$/', $part)) {
+              list ($type, $value) = preg_split ('/:/', $part, 2);
+              $type = preg_replace (array ('/^\s+/','/\s+$/'), '', $type);
+              $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
+
+              if ($type == "Title") {
+                $__blog_data_items[$stat['ctime']]['header_title'] = $value;
+              } elseif ($type == "Author") {
+                $__blog_data_items[$stat['ctime']]['header_author'] = $value;
+                if (preg_match ('/(.*?)\s*<\s*(.*?@.*)\s*>/', $value, $author_info)) {
+                  $__blog_data_items[$stat['ctime']]['header_author'] = $author_info[1];
+                  $__blog_data_items[$stat['ctime']]['header_author_email'] = $author_info[2];
+                }
+              } elseif ($type == "Tags") {
+                $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
+                $__blog_data_items[$stat['ctime']]['header_tags'] = preg_split ('/\s*,\s*/', $value);
+              } else {
+                $__blog_data_items[$stat['ctime']]['header_'.$type] = $value;
+              }
+            }
+          }
         }
       }
       closedir($dh);
     }
+  }
+  krsort ($__blog_data_items, SORT_NUMERIC);
+}
+
+function single_post ($data_item) {
+  global $__status;
+
+  return ($data_item['data_file'] == $__status['data_file']);
+}
+
+function tagged_posts ($data_item) {
+  global $__status;
+
+  return in_array ($__status['tag'], $data_item['header_tags']);
+}
+
+function refine_data_items () {
+  global $__blog_data_items;
+  global $__status;
+
+  if ($__status['page_type'] == 'single_post') {
+    $__blog_data_items = array_filter ($__blog_data_items, 'single_post');
+  } elseif ($__status['page_type'] == 'tagged_posts') {
+    $__blog_data_items = array_filter ($__blog_data_items, 'tagged_posts');
+  } else {
+    // All posts
   }
 }
 ?>

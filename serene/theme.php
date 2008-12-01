@@ -28,8 +28,8 @@ function page_header () {
 
   echo <<<END
     <div id="page_header">
-      <div id="blog_name"><h1>{$__config['blog_name']}</h1></div>
-      <div id="blog_tag_line"><h3>{$__config['blog_tag_line']}</h3></div>
+      <div id="blog_name"><a href="/" title="Go to blog home"><h1>{$__config['blog_name']}</h1></a></div>
+      <div id="blog_tag_line"><h2>{$__config['blog_tag_line']}</h3></div>
     </div>
 END;
 }
@@ -65,6 +65,7 @@ function index_page () {
   </script>
 </head>
 <body>
+<div id='shrink_wrapper'>
 END;
 
   page_header();
@@ -74,6 +75,7 @@ END;
   page_footer();
 
   echo <<<END
+</div> <!-- shrink_wrapper -->
 </body>
 </html>
 END;
