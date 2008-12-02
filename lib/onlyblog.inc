@@ -104,6 +104,8 @@ function transform_text ($entry) {
 }
 
 function format_header ($data_item) {
+  global $__config;
+
   $output = "";
 
   $parts = preg_split ('/\n/', $data_item['header']);
@@ -112,18 +114,21 @@ function format_header ($data_item) {
     $output .= <<<END
     <div class='header_title'>
       <div class='header_type'>Title</div>
-      <div class='header_value'><a href='/?post={$data_item['data_file']}'>
+      <div class='header_value'><a href='{$__config['blog_url']}?post={$data_item['data_file']}'>
         <h3>{$data_item['header_title']}</h3></a></div>
     </div>
 END;
   } else {
-    echo "<b>No title<>/b>";
+    echo "<b>No title</b>";
   }
   if (isset ($data_item['header_author'])) {
     $author = $data_item['header_author'];
     if (isset ($data_item['header_author_email'])) {
       $author = '<a href="mailto:' . $data_item['header_author_email'] . '">'
                 . $data_item['header_author'] . '</a>';
+    }
+    if (isset ($data_item['time'])) {
+      $author .= " on " . date("F j, Y", $data_item['time']);
     }
     $output .= <<<END
     <div class='header_author'>
@@ -137,7 +142,7 @@ END;
 
     foreach ($data_item['header_tags'] as $tag) {
       array_push ($tag_values,
-                  "<div class='header_tag'><a href='/?tag={$tag}'" .
+                  "<div class='header_tag'><a href='{$__config['blog_url']}?tag={$tag}'" .
                   " title='Show all posts tagged {$tag}'>" . $tag . "</a></div>");
     }
 
@@ -186,7 +191,7 @@ function find_blog_data_files () {
           //
           list ($__blog_data_items[$stat['ctime']]['header'],
                 $__blog_data_items[$stat['ctime']]['entry'])
-            = preg_split ('/^--$/ms', $post, 2);
+            = preg_split ('/^--/ms', $post, 2);
 
           //
           // Gather header data
@@ -210,6 +215,9 @@ function find_blog_data_files () {
               } elseif ($type == "Tags") {
                 $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
                 $__blog_data_items[$stat['ctime']]['header_tags'] = preg_split ('/\s*,\s*/', $value);
+              } elseif ($type == "Time") {
+                $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
+                $__blog_data_items[$stat['ctime']]['time'] = strtotime ($value);
               } else {
                 $__blog_data_items[$stat['ctime']]['header_'.$type] = $value;
               }

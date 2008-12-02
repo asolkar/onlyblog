@@ -28,7 +28,7 @@ function page_header () {
 
   echo <<<END
     <div id="page_header">
-      <div id="blog_name"><a href="/" title="Go to blog home"><h1>{$__config['blog_name']}</h1></a></div>
+      <div id="blog_name"><a href="{$__config['blog_url']}" title="Go to blog home"><h1>{$__config['blog_name']}</h1></a></div>
       <div id="blog_tag_line"><h2>{$__config['blog_tag_line']}</h3></div>
     </div>
 END;

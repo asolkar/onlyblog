@@ -16,10 +16,12 @@
 //
 // Personalized OnlyBlog Configuration
 //
-$__config['blog_name']          = 'The OnlyBlog Blog!';
+$__config['blog_name']          = 'Name of you blog';
+$__config['blog_tag_line']      = 'Tag line for your blog';
 $__config['blog_data_dir']      = 'data';
-$__config['owner_name']         = 'Mahesh Asolkar';
-$__config['owner_email']        = 'mahesh@mahesha.com';
+$__config['owner_name']         = 'Your Name';
+$__config['owner_email']        = 'your_email@your_host';
+$__config['blog_url']           = 'http://blog/url/';
 
 $__config['theme_dir']          = 'serene';
 
