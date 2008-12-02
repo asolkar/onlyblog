@@ -38,7 +38,7 @@ function page_footer () {
 
   echo <<<END
     <div id="page_footer">
-      <a href="/">{$__config['blog_name']}</a> is
+      <a href="{$__config['blog_url']}">{$__config['blog_name']}</a> is
       an <a href="http://onlyblog.googlecode.com/">OnlyBlog</a> blog
       using the Serene theme.
     </div>

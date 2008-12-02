@@ -128,7 +128,7 @@ END;
                 . $data_item['header_author'] . '</a>';
     }
     if (isset ($data_item['time'])) {
-      $author .= " on " . date("F j, Y", $data_item['time']);
+      $author .= "<span class='header_time'> on " . date("F j, Y g:i a", $data_item['time']) . "</span>";
     }
     $output .= <<<END
     <div class='header_author'>
@@ -178,25 +178,28 @@ function find_blog_data_files () {
         if (is_file($data_file)
             && is_readable($data_file)
             && preg_match('/\.blog$/', $file)) {
+
+          $data_item = array ();
+
           //
           // We just found a blog data file. Now process it.
           //
           $stat = lstat ($data_file);
-          $__blog_data_items[$stat['ctime']]['data_file'] = $file;
+          $key = $stat['ctime'];
+          $data_item['data_file'] = $file;
 
           $post = file_get_contents ($__config['blog_data_dir'] . '/' . $file);
 
           //
           // The first occurance of '--' separates the header and entry in a post
           //
-          list ($__blog_data_items[$stat['ctime']]['header'],
-                $__blog_data_items[$stat['ctime']]['entry'])
+          list ($data_item['header'], $data_item['entry'])
             = preg_split ('/^--/ms', $post, 2);
 
           //
           // Gather header data
           //
-          $parts = preg_split ('/\n/', $__blog_data_items[$stat['ctime']]['header']);
+          $parts = preg_split ('/\n/', $data_item['header']);
 
           foreach ($parts as $part) {
             if (!preg_match ('/^\s*$/', $part)) {
@@ -205,24 +208,28 @@ function find_blog_data_files () {
               $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
 
               if ($type == "Title") {
-                $__blog_data_items[$stat['ctime']]['header_title'] = $value;
+                $data_item['header_title'] = $value;
               } elseif ($type == "Author") {
-                $__blog_data_items[$stat['ctime']]['header_author'] = $value;
+                $data_item['header_author'] = $value;
                 if (preg_match ('/(.*?)\s*<\s*(.*?@.*)\s*>/', $value, $author_info)) {
-                  $__blog_data_items[$stat['ctime']]['header_author'] = $author_info[1];
-                  $__blog_data_items[$stat['ctime']]['header_author_email'] = $author_info[2];
+                  $data_item['header_author'] = $author_info[1];
+                  $data_item['header_author_email'] = $author_info[2];
                 }
               } elseif ($type == "Tags") {
                 $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
-                $__blog_data_items[$stat['ctime']]['header_tags'] = preg_split ('/\s*,\s*/', $value);
+                $data_item['header_tags'] = preg_split ('/\s*,\s*/', $value);
               } elseif ($type == "Time") {
                 $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
-                $__blog_data_items[$stat['ctime']]['time'] = strtotime ($value);
+                $data_item['time'] = strtotime ($value);
               } else {
-                $__blog_data_items[$stat['ctime']]['header_'.$type] = $value;
+                $data_item['header_'.$type] = $value;
               }
             }
           }
+          if (isset($data_item['time'])) {
+            $key = $data_item['time'];
+          }
+          $__blog_data_items[$key] = $data_item;
         }
       }
       closedir($dh);

@@ -125,7 +125,10 @@ a:hover {
 .header_author .header_value a:hover {
   text-decoration : underline;
 }
-
+.header_time {
+  font-size : x-small;
+  color : #cccccc;
+}
 .header_tags {
   float : right;
   height : 20px;
