@@ -23,6 +23,7 @@ body {
   line-height : 1.6em;
   background-color : white;
   text-align : center;
+  background : url(images/back.png) top center no-repeat;
 }
 
 #shrink_wrapper {
@@ -45,10 +46,11 @@ a:hover {
 .entry_list {
   width : 600px;
   margin : 0 auto;
-  border-top : thin solid #77aa77;
+  border-top : 3px solid #eeeeee;
   text-align : left;
-  padding-bottom : 10px;
+  padding : 10px;
   border-bottom : thin solid #eeeeee;
+  background : white;
 }
 
 /* Header formatting */
@@ -59,7 +61,7 @@ a:hover {
   font-size : xx-large;
   font-weight : bold;
   line-height : 1.8em;
-  color : black;
+  color : white;
   text-decoration : none;
 }
 #page_header h2 {
@@ -69,6 +71,7 @@ a:hover {
   font-weight : bold;
   font-style : italic;
   line-height : 1.8em;
+  color : white;
 }
 
 .entry_header {
@@ -178,4 +181,18 @@ pre {
   font-family : "Trebuchet MS", sans-serif;
   font-size : 0.8em;
   text-align : center;
+}
+
+/* Image display */
+.img_container {
+  display : table;
+  margin : 0 auto;
+  border : thin solid #cccccc;
+  padding : 3px;
+  text-align : center;
+  background-color : #eeeeee;
+}
+
+a img {
+  border : none;
 }
