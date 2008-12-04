@@ -54,7 +54,9 @@ function index_page () {
   <title>{$__status['page_title']}</title>
   </title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
+  <link rel="alternate" type="application/rss+xml"
+        href="{$__config['blog_url']}/feed.php"
+        title="{$__config['blog_name']} feed" />
   <link rel="StyleSheet" href="{$__config['theme_dir']}/{$__config['css_file']}"
         type="text/css" title="Serene Design Style">
 

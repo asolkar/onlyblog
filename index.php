@@ -18,7 +18,7 @@
 //
 include 'lib/config.inc';
 include 'config.inc';
-include 'lib/onlyblog.inc';
+include 'lib/onlyblog.php';
 include $__config['theme_dir'] . "/theme.php";
 
 blog_init();

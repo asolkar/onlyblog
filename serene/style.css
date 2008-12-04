@@ -70,7 +70,7 @@ a:hover {
   font-size : medium;
   font-weight : bold;
   font-style : italic;
-  line-height : 1.8em;
+  line-height : 1.5em;
   color : white;
 }
 
@@ -106,9 +106,10 @@ a:hover {
   display : block;
   font-size : 1.5em;
   font-weight : bold;
-  line-height : 2.3em;
+  line-height : 1.0em;
   text-decoration : none;
   background-color : transparent;
+  vertical-align : bottom;
 }
 .header_title .header_value a:hover {
   text-decoration: underline;
