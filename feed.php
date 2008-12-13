@@ -76,7 +76,7 @@ END;
 
   echo <<<END
 </channel>
-</xml>
+</rss>
 END;
 }
 
