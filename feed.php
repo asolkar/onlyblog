@@ -58,9 +58,14 @@ END;
     $excerpt = substr (strip_tags($data_item['entry']), 0, 200);
     $excerpt = preg_replace ('/(\w+)$/', '', $excerpt);
 
+    //
+    // Feed readers don't quite like tags in the title
+    //
+    $item_title = preg_replace ('/<.*?>/', '', $data_item['header_title']);
+
     echo <<<END
   <item>
-    <title>{$data_item['header_title']}</title>
+    <title>{$item_title}</title>
     <link>{$__config['blog_url']}?post={$data_item['data_file']}</link>
     <pubDate>$pub_date</pubDate>
     <description><![CDATA[$excerpt [...] ]]></description>
