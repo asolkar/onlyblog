@@ -199,36 +199,8 @@ function find_blog_data_files () {
           //
           // Gather header data
           //
-          $parts = preg_split ('/\n/', $data_item['header']);
+          get_header_data ($data_item);
 
-          foreach ($parts as $part) {
-            if (!preg_match ('/^\s*$/', $part)) {
-              list ($type, $value) = preg_split ('/:/', $part, 2);
-              $type = preg_replace (array ('/^\s+/','/\s+$/'), '', $type);
-              $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
-
-              if ($type == "Title") {
-                $data_item['header_title'] = $value;
-              } elseif ($type == "Author") {
-                $data_item['header_author'] = $value;
-                if (preg_match ('/(.*?)\s*<\s*(.*?@.*)\s*>/', $value, $author_info)) {
-                  $data_item['header_author'] = $author_info[1];
-                  $data_item['header_author_email'] = $author_info[2];
-                }
-              } elseif ($type == "Tags") {
-                $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
-                $data_item['header_tags'] = preg_split ('/\s*,\s*/', $value);
-              } elseif ($type == "Time") {
-                $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
-                $data_item['time'] = strtotime ($value);
-              } else {
-                $data_item['header_'.$type] = $value;
-              }
-            }
-          }
-          if (isset($data_item['time'])) {
-            $key = $data_item['time'];
-          }
           $__blog_data_items[$key] = $data_item;
         }
       }
@@ -236,6 +208,39 @@ function find_blog_data_files () {
     }
   }
   krsort ($__blog_data_items, SORT_NUMERIC);
+}
+
+function get_header_data (&$data_item) {
+  $parts = preg_split ('/\n/', $data_item['header']);
+
+  foreach ($parts as $part) {
+    if (!preg_match ('/^\s*$/', $part)) {
+      list ($type, $value) = preg_split ('/:/', $part, 2);
+      $type = preg_replace (array ('/^\s+/','/\s+$/'), '', $type);
+      $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
+
+      if ($type == "Title") {
+        $data_item['header_title'] = $value;
+      } elseif ($type == "Author") {
+        $data_item['header_author'] = $value;
+        if (preg_match ('/(.*?)\s*<\s*(.*?@.*)\s*>/', $value, $author_info)) {
+          $data_item['header_author'] = $author_info[1];
+          $data_item['header_author_email'] = $author_info[2];
+        }
+      } elseif ($type == "Tags") {
+        $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
+        $data_item['header_tags'] = preg_split ('/\s*,\s*/', $value);
+      } elseif ($type == "Time") {
+        $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
+        $data_item['time'] = strtotime ($value);
+      } else {
+        $data_item['header_'.$type] = $value;
+      }
+    }
+  }
+  if (isset($data_item['time'])) {
+    $key = $data_item['time'];
+  }
 }
 
 function single_post ($data_item) {
