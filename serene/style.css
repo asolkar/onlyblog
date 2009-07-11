@@ -196,10 +196,3 @@ pre {
 a img {
   border : none;
 }
-
-/* DISQUS comments */
-#disqus_thread {
-  height : 20px;
-  padding-left : 20px;
-  background : url(icons/user_comment.png) no-repeat;
-}

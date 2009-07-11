@@ -26,4 +26,9 @@ $__config['blog_url']           = 'http://blog/url/';
 $__config['theme_dir']          = 'serene';
 
 // $__config['transform_text']     = 0;
+
+//
+// Comments via IntenseDebate : http://intensedebate.com/
+//
+$__config['intensedebate_blog_acct']   = 'somehexkey';
 ?>
