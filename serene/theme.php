@@ -1,4 +1,5 @@
 <?php
+
 //  Copyright 2008 Mahesh Asolkar
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -73,6 +74,12 @@ END;
   page_header();
 
   get_post_list();
+
+  if ($__status['page_type'] == 'single_post') {
+    if (isset ($__config['intensedebate_blog_acct'])) {
+      echo intense_debate_stub ("http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+    }
+  }
 
   page_footer();
 

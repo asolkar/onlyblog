@@ -20,9 +20,8 @@
 body {
   font-family : Georgia, "Bitstream Vera Serif", "Times New Roman", serif;
   font-size : small;
-  line-height : 1.6em;
+  line-height : 1.7em;
   background-color : white;
-  text-align : center;
   background : url(images/back.png) top center no-repeat;
 }
 
@@ -196,4 +195,11 @@ pre {
 
 a img {
   border : none;
+}
+
+/* DISQUS comments */
+#disqus_thread {
+  height : 20px;
+  padding-left : 20px;
+  background : url(icons/user_comment.png) no-repeat;
 }

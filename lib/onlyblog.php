@@ -201,6 +201,14 @@ function find_blog_data_files () {
           //
           get_header_data ($data_item);
 
+          //
+          // If post header has time, use it as key, else use change time
+          // as assigned above
+          //
+          if (isset ($data_item['time'])) {
+            $key = $data_item['time'];
+          }
+
           $__blog_data_items[$key] = $data_item;
         }
       }
@@ -266,5 +274,25 @@ function refine_data_items () {
   } else {
     // All posts
   }
+}
+
+function intense_debate_stub ($post_url) {
+  global $__status, $__config;
+
+  $output = "";
+
+  // var idcomments_post_id ='{$post_url}';
+
+  $output .= <<<END
+<script>
+var idcomments_acct = '{$__config["intensedebate_blog_acct"]}';
+var idcomments_post_id;
+var idcomments_post_url;
+</script>
+<span id="IDCommentsPostTitle" style="display:none"></span>
+<script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+END;
+
+  return $output;
 }
 ?>
