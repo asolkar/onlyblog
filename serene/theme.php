@@ -66,7 +66,11 @@ function index_page () {
   //<![CDATA[
   //]]>
   </script>
-</head>
+<script type="text/javascript">
+
+   var disqus_developer = 1;
+
+</script> </head>
 <body>
 <div id='shrink_wrapper'>
 END;
@@ -75,16 +79,21 @@ END;
 
   get_post_list();
 
-  if ($__status['page_type'] == 'single_post') {
-    if (isset ($__config['intensedebate_blog_acct'])) {
-      echo intense_debate_stub ("http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
-    }
-  }
-
   page_footer();
 
   echo <<<END
 </div> <!-- shrink_wrapper -->
+END;
+
+  if (isset ($__config['intensedebate_blog_acct'])) {
+    echo intense_debate_cmt_cnt_stub ("");
+  }
+  if (isset ($__config['disqus_blog_acct'])) {
+    echo disqus_cmt_cnt_stub ("{$__config['blog_url']}?post={$data_item['data_file']}");
+  }
+
+
+  echo <<<END
 </body>
 </html>
 END;

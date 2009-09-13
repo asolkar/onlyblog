@@ -193,6 +193,12 @@ pre {
   background-color : #eeeeee;
 }
 
+.img_container .caption {
+  font-family : "Trebuchet MS", sans-serif;
+  font-size : x-small;
+  color : #777777;
+}
+
 a img {
   border : none;
 }

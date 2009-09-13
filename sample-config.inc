@@ -30,5 +30,14 @@ $__config['theme_dir']          = 'serene';
 //
 // Comments via IntenseDebate : http://intensedebate.com/
 //
-$__config['intensedebate_blog_acct']   = 'somehexkey';
+// Uncomment the following to enable IntenseDebate comments
+//
+//$__config['intensedebate_blog_acct']   = 'some_hex_key';
+
+//
+// Comments via Disqus : http://disqus.com/
+//
+// Uncomment the following to enable disqus comments
+//
+//$__config['disqus_blog_acct']   = 'blog_id_on_disqus';
 ?>

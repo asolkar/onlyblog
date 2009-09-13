@@ -48,7 +48,7 @@ function blog_init () {
 
 function get_post_list() {
   global $__blog_data_items;
-  global $__config;
+  global $__status, $__config;
 
   //
   // Populate the $__blog_data_items array with qualifying blog data
@@ -62,7 +62,7 @@ function get_post_list() {
   refine_data_items ();
 
   echo <<<END
-  <div class='entry_list'>
+  <div class='entry_list'> <!-- page_type = {$__status['page_type']} -->
 END;
   foreach ($__blog_data_items as $data_item) {
     //
@@ -91,6 +91,21 @@ END;
       </div><!-- entry_body -->
     </div><!-- entry -->
 END;
+
+    if (isset ($__config['intensedebate_blog_acct'])) {
+      if ($__status['page_type'] == 'single_post') {
+        echo intense_debate_stub ("{$__config['blog_url']}?post={$data_item['data_file']}");
+      } else {
+        echo "<span class=\"comments\"><a href=\"{$__config['blog_url']}?post={$data_item['data_file']}#respond\">Comments</a></span>";
+      }
+    }
+    if (isset ($__config['disqus_blog_acct'])) {
+      if ($__status['page_type'] == 'single_post') {
+        echo disqus_stub ("{$__config['blog_url']}?post={$data_item['data_file']}");
+      } else {
+        echo "<span class=\"comments\"><a href=\"{$__config['blog_url']}?post={$data_item['data_file']}#disqus_thread\">Comments</a></span>";
+      }
+    }
   }
   echo <<<END
   </div><!-- entry_list -->
@@ -276,6 +291,9 @@ function refine_data_items () {
   }
 }
 
+//
+// IntenseDebate stubs
+//
 function intense_debate_stub ($post_url) {
   global $__status, $__config;
 
@@ -287,10 +305,69 @@ function intense_debate_stub ($post_url) {
 <script>
 var idcomments_acct = '{$__config["intensedebate_blog_acct"]}';
 var idcomments_post_id;
-var idcomments_post_url;
+var idcomments_post_url = '{$post_url}';
 </script>
 <span id="IDCommentsPostTitle" style="display:none"></span>
 <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+END;
+
+  return $output;
+}
+
+function intense_debate_cmt_cnt_stub ($post_url) {
+  global $__status, $__config;
+
+  $output = "";
+
+  // var idcomments_post_id ='{$post_url}';
+
+  $output .= <<<END
+<script>
+var idcomments_acct = '{$__config["intensedebate_blog_acct"]}';
+var idcomments_post_id;
+var idcomments_post_url = '{$post_url}';
+</script>
+<script type="text/javascript" src="http://www.intensedebate.com/js/genericLinkWrapperV2.js"></script>
+END;
+
+  return $output;
+}
+
+//
+// Disqus stubs
+//
+function disqus_stub ($post_url) {
+  global $__status, $__config;
+
+  $output = "";
+
+  $output .= <<<END
+<div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/{$__config['disqus_blog_acct']}/embed.js"></script><noscript><a href="http://{$__config['disqus_blog_acct']}.disqus.com/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+END;
+
+  return $output;
+}
+
+function disqus_cmt_cnt_stub ($post_url) {
+  global $__status, $__config;
+
+  $output = "";
+
+  $output .= <<<END
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+	var links = document.getElementsByTagName('a');
+	var query = '?';
+	for(var i = 0; i < links.length; i++) {
+	if(links[i].href.indexOf('#disqus_thread') >= 0) {
+		query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+	}
+	}
+	document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/{$__config['disqus_blog_acct']}/get_num_replies.js' + query + '"></' + 'script>');
+})();
+//]]>
+</script>
 END;
 
   return $output;
