@@ -1,0 +1,13 @@
+Title: Title of Blog Entry Goes Here
+Author: Your Name <user@host.com>
+Tags: tags, separated, by, commas
+Time: YYYY-MM-DD HH:MM:SS
+--
+This is a template for blog entry. An entry should reside in a
+directory pointed by the variable $__config['blog_data_dir'] in
+the config.inc file. The extension of a blog entry must be .blog
+
+A sample config.inc is placed in this direcotry by the name
+sample-config.inc. You can copy this file to config.inc and
+customize it.
+
