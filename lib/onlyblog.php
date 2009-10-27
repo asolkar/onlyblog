@@ -50,66 +50,82 @@ function get_post_list() {
   global $__blog_data_items;
   global $__status, $__config;
 
-  //
-  // Populate the $__blog_data_items array with qualifying blog data
-  // file names
-  //
-  find_blog_data_files ();
+  if ($__status['page_type'] == 'single_post') {
+    single_blog_data_file ($__status['data_file']);
+  } else {
+    //
+    // Populate the $__blog_data_items array with qualifying blog data
+    // file names
+    //
+    find_blog_data_files ();
 
-  //
-  // Refine the list based on query
-  //
-  refine_data_items ();
+    //
+    // Refine the list based on query
+    //
+    refine_data_items ();
+  }
+}
+
+function show_post_list() {
+  global $__blog_data_items;
+  global $__status, $__config;
 
   echo <<<END
   <div class='entry_list'> <!-- page_type = {$__status['page_type']} -->
 END;
   foreach ($__blog_data_items as $data_item) {
-    //
-    // Get the display version of the raw entry text
-    //
-    if ($__config['transform_text'] == 1) {
-      $entry = transform_text ($data_item['entry']);
-    }
-
-    //
-    // Get the display version of the raw header text
-    //
-    $header = format_header ($data_item);
-
-    //
-    // Display the post
-    //
-    echo <<<END
-    <div class='entry'>
-      <div class='entry_header'>
-        $header
-      </div><!-- entry_header -->
-      <br class="header_body_separator">
-      <div class='entry_body'>
-        $entry
-      </div><!-- entry_body -->
-    </div><!-- entry -->
-END;
-
-    if (isset ($__config['intensedebate_blog_acct'])) {
-      if ($__status['page_type'] == 'single_post') {
-        echo intense_debate_stub ("{$__config['blog_url']}?post={$data_item['data_file']}");
-      } else {
-        echo "<span class=\"comments\"><a href=\"{$__config['blog_url']}?post={$data_item['data_file']}#respond\">Comments</a></span>";
-      }
-    }
-    if (isset ($__config['disqus_blog_acct'])) {
-      if ($__status['page_type'] == 'single_post') {
-        echo disqus_stub ("{$__config['blog_url']}?post={$data_item['data_file']}");
-      } else {
-        echo "<span class=\"comments\"><a href=\"{$__config['blog_url']}?post={$data_item['data_file']}#disqus_thread\">Comments</a></span>";
-      }
-    }
+    show_data_item ($data_item);
   }
   echo <<<END
   </div><!-- entry_list -->
 END;
+}
+
+function show_data_item ($data_item) {
+  global $__status, $__config;
+
+  //
+  // Get the display version of the raw entry text
+  //
+  if ($__config['transform_text'] == 1) {
+    $entry = transform_text ($data_item['entry']);
+  }
+
+  //
+  // Get the display version of the raw header text
+  //
+  $header = format_header ($data_item);
+
+  //
+  // Display the post
+  //
+  echo <<<END
+  <div class='entry'>
+    <div class='entry_header'>
+      $header
+    </div><!-- entry_header -->
+    <br class="header_body_separator">
+    <div class='entry_body'>
+      $entry
+    </div><!-- entry_body -->
+  </div><!-- entry -->
+END;
+
+  if (isset ($__config['intensedebate_blog_acct'])) {
+    if ($__status['page_type'] == 'single_post') {
+      echo intense_debate_stub ("{$__config['blog_url']}?post={$data_item['data_file']}");
+    } else {
+      echo "<span class=\"comments\"><a href=\"{$__config['blog_url']}?post={$data_item['data_file']}#respond\">Comments</a></span>";
+    }
+  }
+  if (isset ($__config['disqus_blog_acct'])) {
+    if ($__status['page_type'] == 'single_post') {
+      echo disqus_stub ("{$__config['blog_url']}?post={$data_item['data_file']}");
+    } else {
+      echo "<span class=\"comments\"><a href=\"{$__config['blog_url']}?post={$data_item['data_file']}#disqus_thread\">Comments</a></span>";
+    }
+  }
+
 }
 
 function transform_text ($entry) {
@@ -231,6 +247,49 @@ function find_blog_data_files () {
     }
   }
   krsort ($__blog_data_items, SORT_NUMERIC);
+}
+
+function single_blog_data_file ($file) {
+  global $__config;
+  global $__blog_data_items;
+  global $__status;
+
+  $data_dir = $__config['blog_data_dir'];
+
+  $data_item = array ();
+
+  //
+  // We just found a blog data file. Now process it.
+  //
+  $data_file = $data_dir . '/' . $file;
+  $stat = lstat ($data_file);
+  $key = $stat['ctime'];
+  $data_item['data_file'] = $file;
+
+  $post = file_get_contents ($__config['blog_data_dir'] . '/' . $file);
+
+  //
+  // The first occurance of '--' separates the header and entry in a post
+  //
+  list ($data_item['header'], $data_item['entry'])
+    = preg_split ('/^--/ms', $post, 2);
+
+  //
+  // Gather header data
+  //
+  get_header_data ($data_item);
+  $__status['page_title'] = $data_item['header_title'];
+
+
+  //
+  // If post header has time, use it as key, else use change time
+  // as assigned above
+  //
+  if (isset ($data_item['time'])) {
+    $key = $data_item['time'];
+  }
+
+  $__blog_data_items[$key] = $data_item;
 }
 
 function get_header_data (&$data_item) {

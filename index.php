@@ -23,5 +23,5 @@ include $__config['theme_dir'] . "/theme.php";
 
 blog_init();
 
-index_page();
+show_page();
 ?>

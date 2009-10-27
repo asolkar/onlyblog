@@ -40,20 +40,20 @@ function page_footer () {
   echo <<<END
     <div id="page_footer">
       <a href="{$__config['blog_url']}">{$__config['blog_name']}</a> is
-      an <a href="http://onlyblog.googlecode.com/">OnlyBlog</a> blog
+      an <a href="http://github.com/asolkar/onlyblog/">OnlyBlog</a> blog
       using the Serene theme.
     </div>
 END;
 }
 
-function index_page () {
+function show_page () {
   global $__status, $__config;
+
+  get_post_list();
 
   echo <<<END
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>{$__status['page_title']}</title>
-  </title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="alternate" type="application/rss+xml"
         href="{$__config['blog_url']}/feed.php"
@@ -66,18 +66,22 @@ function index_page () {
   //<![CDATA[
   //]]>
   </script>
-<script type="text/javascript">
+  <script type="text/javascript">
 
    var disqus_developer = 1;
 
-</script> </head>
+  </script>
+
+  <title>{$__status['page_title']}</title>
+
+  </head>
 <body>
 <div id='shrink_wrapper'>
 END;
 
   page_header();
 
-  get_post_list();
+  show_post_list();
 
   page_footer();
 
