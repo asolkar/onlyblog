@@ -27,9 +27,12 @@ $__config['transform_text']     = 1;
 
 //
 // Following files are used to store caching/indexing related
-// information. Files are relative to the blog_data_dir.
+// information. Files are relative to the blog_data_dir. They
+// are placed in a 'meta' directory so that the directory can
+// be given write permissions for the world. That is the only
+// place when the webserver user would ever write to.
 //
-$__config['sha1_file']          = '.data_sha1';
-$__config['cache_file']         = '.data_cache';
+$__config['sha1_file']          = 'meta/.data_sha1';
+$__config['cache_file']         = 'meta/.data_cache';
 
 ?>

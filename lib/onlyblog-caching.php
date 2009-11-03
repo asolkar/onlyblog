@@ -70,7 +70,12 @@ function is_blog_data_changed () {
   return (get_data_sha1() != get_stored_sha1());
 }
 function is_cache_stale () {
-  return is_blog_data_changed();
+  $cache_file = $__config['blog_data_dir'] . '/' . $__config['cache_file'];
+  if (file_exists($cache_file)) {
+    return is_blog_data_changed();
+  } else {
+    return 0;
+  }
 }
 
 //
