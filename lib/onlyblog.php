@@ -16,6 +16,7 @@
 //
 // OnlyBlog Library
 //
+include 'lib/onlyblog-caching.php';
 
 $__status['page_type']          = 'index';
 $__status['page_title']         = 'New OnlyBlog';

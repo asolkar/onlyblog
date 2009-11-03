@@ -17,4 +17,46 @@
 // OnlyBlog caching (indexing) related functions
 //
 
+//
+// Calculate and return the SHA1 of blog entries
+//
+function get_data_sha1 () {
+  global $__status, $__config;
+
+  $context = hash_init('sha1');
+  chdir($__config['blog_data_dir']);
+  foreach (glob("*.blog") as $filename) {
+    hash_update_file($context, $filename);
+  }
+  chdir($__config['blog_base_dir']);
+  return hash_final($context);
+}
+
+//
+// Read the sha1_file and return the stored SHA1 of blog entries
+//
+function get_stored_sha1 () {
+  global $__status, $__config;
+
+  $sha1_file = $__config['blog_data_dir'] . '/' . $__config['sha1_file'];
+
+  if (file_exists ($sha1_file)) {
+    return trim(file_get_contents ($sha1_file));
+  } else {
+    return '';
+  }
+}
+
+//
+// Check if blog data (.blog files in blog_data_dir) has changed
+// in any way - or in other words, is cache stale?
+//
+function is_blog_data_changed () {
+  global $__status, $__config;
+
+  return (get_data_sha1() != get_stored_sha1());
+}
+function is_cache_stale () {
+  return is_blog_data_changed();
+}
 ?>
