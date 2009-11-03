@@ -16,6 +16,7 @@
 //
 // OnlyBlog Library
 //
+include 'lib/onlyblog-content.php';
 include 'lib/onlyblog-caching.php';
 
 $__status['page_type']          = 'index';
@@ -30,6 +31,8 @@ function blog_init () {
   global $__status, $__config;
 
   $__status['page_title'] = $__config['blog_name'];
+  $__status['debug'] = '';
+
   //
   // Handle requests
   //
@@ -55,10 +58,17 @@ function get_post_list() {
     single_blog_data_file ($__status['data_file']);
   } else {
     //
-    // Populate the $__blog_data_items array with qualifying blog data
-    // file names
+    // Update the cache file if it is stale
     //
-    find_blog_data_files ();
+    if (is_cache_stale()) {
+      update_cache_file();
+    }
+
+    //
+    // De-serialize data from the cache file to get
+    // post list
+    //
+    load_cache_file ();
 
     //
     // Refine the list based on query
@@ -189,141 +199,6 @@ END;
   }
 
   return $output;
-}
-
-function find_blog_data_files () {
-  global $__config;
-  global $__blog_data_items;
-  global $__status;
-
-  $data_dir = $__config['blog_data_dir'];
-
-  //
-  // Find blog data files in $__config['blog_data_dir'] as specified in the
-  // blog configuration. A blog data file is any file in this directory that is
-  // of type 'file', is readable and has an extension '.blog'
-  //
-  if (is_dir($data_dir)) {
-    if ($dh = opendir($data_dir)) {
-      while (($file = readdir($dh)) !== false) {
-        $data_file = $data_dir . '/' . $file;
-        if (is_file($data_file)
-            && is_readable($data_file)
-            && preg_match('/\.blog$/', $file)) {
-
-          $data_item = array ();
-
-          //
-          // We just found a blog data file. Now process it.
-          //
-          $stat = lstat ($data_file);
-          $key = $stat['ctime'];
-          $data_item['data_file'] = $file;
-
-          $post = file_get_contents ($__config['blog_data_dir'] . '/' . $file);
-
-          //
-          // The first occurance of '--' separates the header and entry in a post
-          //
-          list ($data_item['header'], $data_item['entry'])
-            = preg_split ('/^--/ms', $post, 2);
-
-          //
-          // Gather header data
-          //
-          get_header_data ($data_item);
-
-          //
-          // If post header has time, use it as key, else use change time
-          // as assigned above
-          //
-          if (isset ($data_item['time'])) {
-            $key = $data_item['time'];
-          }
-
-          $__blog_data_items[$key] = $data_item;
-        }
-      }
-      closedir($dh);
-    }
-  }
-  krsort ($__blog_data_items, SORT_NUMERIC);
-}
-
-function single_blog_data_file ($file) {
-  global $__config;
-  global $__blog_data_items;
-  global $__status;
-
-  $data_dir = $__config['blog_data_dir'];
-
-  $data_item = array ();
-
-  //
-  // We just found a blog data file. Now process it.
-  //
-  $data_file = $data_dir . '/' . $file;
-  $stat = lstat ($data_file);
-  $key = $stat['ctime'];
-  $data_item['data_file'] = $file;
-
-  $post = file_get_contents ($__config['blog_data_dir'] . '/' . $file);
-
-  //
-  // The first occurance of '--' separates the header and entry in a post
-  //
-  list ($data_item['header'], $data_item['entry'])
-    = preg_split ('/^--/ms', $post, 2);
-
-  //
-  // Gather header data
-  //
-  get_header_data ($data_item);
-  $__status['page_title'] = $data_item['header_title'];
-
-
-  //
-  // If post header has time, use it as key, else use change time
-  // as assigned above
-  //
-  if (isset ($data_item['time'])) {
-    $key = $data_item['time'];
-  }
-
-  $__blog_data_items[$key] = $data_item;
-}
-
-function get_header_data (&$data_item) {
-  $parts = preg_split ('/\n/', $data_item['header']);
-
-  foreach ($parts as $part) {
-    if (!preg_match ('/^\s*$/', $part)) {
-      list ($type, $value) = preg_split ('/:/', $part, 2);
-      $type = preg_replace (array ('/^\s+/','/\s+$/'), '', $type);
-      $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
-
-      if ($type == "Title") {
-        $data_item['header_title'] = $value;
-      } elseif ($type == "Author") {
-        $data_item['header_author'] = $value;
-        if (preg_match ('/(.*?)\s*<\s*(.*?@.*)\s*>/', $value, $author_info)) {
-          $data_item['header_author'] = $author_info[1];
-          $data_item['header_author_email'] = $author_info[2];
-        }
-      } elseif ($type == "Tags") {
-        $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
-        $data_item['header_tags'] = preg_split ('/\s*,\s*/', $value);
-      } elseif ($type == "Time") {
-        $value = preg_replace (array ('/^\s+/','/\s+$/'), '', $value);
-        $data_item['time'] = strtotime ($value);
-      } else {
-        $data_item['header_'.$type] = $value;
-      }
-    }
-  }
-  if (isset($data_item['time'])) {
-    $key = $data_item['time'];
-  }
 }
 
 function single_post ($data_item) {

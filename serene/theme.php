@@ -38,6 +38,8 @@ function page_footer () {
   global $__status, $__config;
 
   echo <<<END
+    <!-- DEBUG:
+{$__status['debug']} -->
     <div id="page_footer">
       <a href="{$__config['blog_url']}">{$__config['blog_name']}</a> is
       an <a href="http://github.com/asolkar/onlyblog/">OnlyBlog</a> blog

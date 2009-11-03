@@ -48,6 +48,19 @@ function get_stored_sha1 () {
 }
 
 //
+// Write calculated SHA1 of blog entries into sha1_file
+//
+function set_stored_sha1 ($sha1_value) {
+  global $__status, $__config;
+
+  $sha1_file = $__config['blog_data_dir'] . '/' . $__config['sha1_file'];
+
+  file_put_contents ($sha1_file, $sha1_value, LOCK_EX);
+
+  $__status['debug'] .= "  /**/ Set SHA1: $sha1_value\n";
+}
+
+//
 // Check if blog data (.blog files in blog_data_dir) has changed
 // in any way - or in other words, is cache stale?
 //
@@ -58,5 +71,33 @@ function is_blog_data_changed () {
 }
 function is_cache_stale () {
   return is_blog_data_changed();
+}
+
+//
+// This function is called when cache file needs to be updated/created.
+//
+function update_cache_file () {
+  global $__status, $__config, $__blog_data_items;
+
+  $cache_file = $__config['blog_data_dir'] . '/' . $__config['cache_file'];
+
+  find_blog_data_files ();
+
+  file_put_contents ($cache_file, serialize ($__blog_data_items), LOCK_EX);
+
+  set_stored_sha1 (get_data_sha1());
+
+  $__status['debug'] .= "  /**/ Updated cache\n";
+}
+
+//
+// Get the data from cache file
+//
+function load_cache_file () {
+  global $__status, $__config, $__blog_data_items;
+
+  $cache_file = $__config['blog_data_dir'] . '/' . $__config['cache_file'];
+
+  $__blog_data_items = unserialize (file_get_contents ($cache_file));
 }
 ?>
