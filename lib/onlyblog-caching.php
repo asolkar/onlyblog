@@ -99,5 +99,7 @@ function load_cache_file () {
   $cache_file = $__config['blog_data_dir'] . '/' . $__config['cache_file'];
 
   $__blog_data_items = unserialize (file_get_contents ($cache_file));
+
+  $__status['debug'] .= "  /**/ Loaded cache with " . count($__blog_data_items) . " items\n";
 }
 ?>

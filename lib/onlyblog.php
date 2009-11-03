@@ -54,26 +54,32 @@ function get_post_list() {
   global $__blog_data_items;
   global $__status, $__config;
 
+  //
+  // Update the cache file if it is stale
+  //
+  if (is_cache_stale()) {
+    update_cache_file();
+  }
+
+  //
+  // De-serialize data from the cache file to get
+  // post list
+  //
+  load_cache_file ();
+
+  //
+  // Refine the list based on query
+  //
+  refine_data_items ();
+
+  //
+  // If we are displaying a single post, now set the title of the page
+  //
   if ($__status['page_type'] == 'single_post') {
-    single_blog_data_file ($__status['data_file']);
-  } else {
-    //
-    // Update the cache file if it is stale
-    //
-    if (is_cache_stale()) {
-      update_cache_file();
+    $__status['debug'] .= "  /**/ Displaying single post with " . count($__blog_data_items) . " items\n";
+    foreach ($__blog_data_items as $data_item) {
+      $__status['page_title'] = $data_item['header_title'];
     }
-
-    //
-    // De-serialize data from the cache file to get
-    // post list
-    //
-    load_cache_file ();
-
-    //
-    // Refine the list based on query
-    //
-    refine_data_items ();
   }
 }
 

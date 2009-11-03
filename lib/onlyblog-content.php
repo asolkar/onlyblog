@@ -22,9 +22,7 @@
 // file names
 //
 function find_blog_data_files () {
-  global $__config;
-  global $__blog_data_items;
-  global $__status;
+  global $__config, $__status, $__blog_data_items;
 
   $data_dir = $__config['blog_data_dir'];
 
@@ -78,48 +76,6 @@ function find_blog_data_files () {
     }
   }
   krsort ($__blog_data_items, SORT_NUMERIC);
-}
-
-function single_blog_data_file ($file) {
-  global $__config;
-  global $__blog_data_items;
-  global $__status;
-
-  $data_dir = $__config['blog_data_dir'];
-
-  $data_item = array ();
-
-  //
-  // We just found a blog data file. Now process it.
-  //
-  $data_file = $data_dir . '/' . $file;
-  $stat = lstat ($data_file);
-  $key = $stat['ctime'];
-  $data_item['data_file'] = $file;
-
-  $post = file_get_contents ($__config['blog_data_dir'] . '/' . $file);
-
-  //
-  // The first occurance of '--' separates the header and entry in a post
-  //
-  list ($data_item['header'], $data_item['entry'])
-    = preg_split ('/^--/ms', $post, 2);
-
-  //
-  // Gather header data
-  //
-  get_header_data ($data_item);
-  $__status['page_title'] = $data_item['header_title'];
-
-  //
-  // If post header has time, use it as key, else use change time
-  // as assigned above
-  //
-  if (isset ($data_item['time'])) {
-    $key = $data_item['time'];
-  }
-
-  $__blog_data_items[$key] = $data_item;
 }
 
 function get_header_data (&$data_item) {
