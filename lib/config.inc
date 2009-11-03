@@ -35,4 +35,9 @@ $__config['transform_text']     = 1;
 $__config['sha1_file']          = 'meta/.data_sha1';
 $__config['cache_file']         = 'meta/.data_cache';
 
+//
+// Pagination
+//
+$__config['posts_per_page']     = 10;
+
 ?>

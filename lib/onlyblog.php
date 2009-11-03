@@ -23,15 +23,17 @@ $__status['page_type']          = 'index';
 $__status['page_title']         = 'New OnlyBlog';
 
 $__blog_data_items              = array();
+$__query_params                 = array();
 
 //
 // Handle requests
 //
 function blog_init () {
-  global $__status, $__config;
+  global $__status, $__config, $__query_params;
 
   $__status['page_title'] = $__config['blog_name'];
   $__status['debug'] = '';
+  $__status['page_start'] = 0;
 
   //
   // Handle requests
@@ -42,11 +44,16 @@ function blog_init () {
   } elseif (isset ($_GET['tag'])) {
     $__status['page_type'] = 'tagged_posts';
     $__status['tag'] = $_GET['tag'];
+    $__query_params['tag'] = $_GET['tag'];
   } else {
     if (isset ($_POST['action'])) {
     } else {
       // Page type is 'main'
     }
+  }
+  if (isset ($_GET['fp'])) {
+    $__status['page_start'] = $_GET['fp'];
+    $__status['debug'] .= "  /**/ Starting with post " . $__status['page_start'] . "\n";
   }
 }
 
@@ -71,6 +78,7 @@ function get_post_list() {
   // Refine the list based on query
   //
   refine_data_items ();
+  $__status['debug'] .= "  /**/ After refining " . count($__blog_data_items) . " items to display\n";
 
   //
   // If we are displaying a single post, now set the title of the page
@@ -84,18 +92,41 @@ function get_post_list() {
 }
 
 function show_post_list() {
-  global $__blog_data_items;
+  global $__blog_data_items, $__query_params;
   global $__status, $__config;
 
-  echo <<<END
+  $last_post_id = 0;
+
+?>
   <div class='entry_list'> <!-- page_type = {$__status['page_type']} -->
-END;
-  foreach ($__blog_data_items as $data_item) {
-    show_data_item ($data_item);
+<?php
+  //
+  // Using for loop instead of foreach, for easier pagination
+  //
+  // foreach ($__blog_data_items as $data_item) {
+  $data_keys = array_keys($__blog_data_items);
+  for ($post_id = 0; $post_id < sizeof($data_keys); $post_id ++) {
+    if (($post_id >= $__status['page_start'])
+        && ($post_id < ($__status['page_start'] + $__config['posts_per_page']))) {
+      $data_item = $__blog_data_items[$data_keys[$post_id]];
+      show_data_item ($data_item);
+      $__status['debug'] .= "  /**/ Showing $post_id (key={$data_keys[$post_id]})\n";
+      $last_post_id = $post_id;
+    }
   }
-  echo <<<END
+?>
   </div><!-- entry_list -->
-END;
+<?php
+  if (sizeof($data_keys) > ($last_post_id+1)) {
+    //
+    // More posts to display
+    //
+    $__query_params['fp'] = $last_post_id+1;
+    $query_str = http_build_query($__query_params);
+?>
+    <a href="<?php echo $__config['blog_url'] ?>?<?php echo $query_str ?>">Next</a>
+<?php
+  }
 }
 
 function show_data_item ($data_item) {
