@@ -76,6 +76,36 @@ function find_blog_data_files () {
     }
   }
   krsort ($__blog_data_items, SORT_NUMERIC);
+
+  setup_list_links ();
+}
+
+function setup_list_links () {
+  global $__blog_data_items, $__status;
+
+  $first_key = reset ($__blog_data_items);
+  if ($first_key == FALSE) {
+    return;
+  }
+
+  $__status['debug'] .= "  /**/ Linking " . count($__blog_data_items) . " items\n";
+
+  $data_keys = array_keys($__blog_data_items);
+  for ($post_id = 0; $post_id < sizeof($data_keys); $post_id ++) {
+    $prev_key = $data_keys[$post_id-1];
+    $curr_key = $data_keys[$post_id];
+    $next_key = $data_keys[$post_id+1];
+    if ($post_id == 0) { // First
+      $__blog_data_items[$curr_key]['key_prev_post'] = '';
+      $__blog_data_items[$curr_key]['key_next_post'] = $__blog_data_items[$next_key]['time'];
+    } else if ($post_id == (sizeof($data_keys)-1)) { // Last
+      $__blog_data_items[$curr_key]['key_prev_post'] = $__blog_data_items[$prev_key]['time'];
+      $__blog_data_items[$curr_key]['key_next_post'] = '';
+    } else { // Middle
+      $__blog_data_items[$curr_key]['key_prev_post'] = $__blog_data_items[$prev_key]['time'];
+      $__blog_data_items[$curr_key]['key_next_post'] = $__blog_data_items[$next_key]['time'];
+    }
+  }
 }
 
 function get_header_data (&$data_item) {

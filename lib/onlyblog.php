@@ -23,6 +23,7 @@ $__status['page_type']          = 'index';
 $__status['page_title']         = 'New OnlyBlog';
 
 $__blog_data_items              = array();
+$__selected_item_keys           = array();
 $__query_params                 = array();
 
 //
@@ -58,7 +59,7 @@ function blog_init () {
 }
 
 function get_post_list() {
-  global $__blog_data_items;
+  global $__blog_data_items, $__selected_item_keys;
   global $__status, $__config;
 
   //
@@ -78,21 +79,21 @@ function get_post_list() {
   // Refine the list based on query
   //
   refine_data_items ();
-  $__status['debug'] .= "  /**/ After refining " . count($__blog_data_items) . " items to display\n";
+  $__status['debug'] .= "  /**/ After refining " . count($__selected_item_keys) . " items to display\n";
 
   //
   // If we are displaying a single post, now set the title of the page
   //
   if ($__status['page_type'] == 'single_post') {
-    $__status['debug'] .= "  /**/ Displaying single post with " . count($__blog_data_items) . " items\n";
-    foreach ($__blog_data_items as $data_item) {
-      $__status['page_title'] = $data_item['header_title'];
+    $__status['debug'] .= "  /**/ Displaying single post with " . count($__selected_item_keys) . " items\n";
+    foreach ($__selected_item_keys as $data_key) {
+      $__status['page_title'] = $__blog_data_items[$data_key]['header_title'];
     }
   }
 }
 
 function show_post_list() {
-  global $__blog_data_items, $__query_params;
+  global $__blog_data_items, $__selected_item_keys, $__query_params;
   global $__status, $__config;
 
   $last_post_id = 0;
@@ -103,8 +104,7 @@ function show_post_list() {
   //
   // Using for loop instead of foreach, for easier pagination
   //
-  // foreach ($__blog_data_items as $data_item) {
-  $data_keys = array_keys($__blog_data_items);
+  $data_keys = array_keys($__selected_item_keys);
   for ($post_id = 0; $post_id < sizeof($data_keys); $post_id ++) {
     if (($post_id >= $__status['page_start'])
         && ($post_id < ($__status['page_start'] + $__config['posts_per_page']))) {
@@ -126,6 +126,81 @@ function show_post_list() {
 // - If in single post mode, show 'previous title'/'next title' links [TODO]
 //
 function show_page_nav () {
+  global $__status;
+
+  if ($__status['page_type'] == 'single_post') {
+    show_single_post_page_nav ();
+  } else {
+    show_list_page_nav();
+  }
+}
+
+function show_single_post_page_nav () {
+  global $__blog_data_items, $__query_params, $__selected_item_keys;
+  global $__status, $__config;
+
+  $data_keys = array_keys($__selected_item_keys);
+  $current_key = reset($__selected_item_keys);
+  $data_item = $__blog_data_items[$current_key];
+
+  $older_item = FALSE;
+  $newer_item = FALSE;
+  if ($data_item['key_next_post'] != FALSE) {
+    $older_item = $__blog_data_items[$data_item['key_next_post']];
+  }
+  if ($data_item['key_prev_post'] != FALSE) {
+    $newer_item = $__blog_data_items[$data_item['key_prev_post']];
+  }
+?>
+  <br class='clear'>
+  <div class='page_nav'>
+<?php
+  //
+  // Display 'Older Post' link
+  //
+  if ($older_item != FALSE) {
+    $__query_params['post'] = $older_item['data_file'];
+    $query_str = http_build_query($__query_params);
+?>
+    <div class='page_nav_older page_nav_active'>
+      <a href="<?php echo $__config['blog_url'] ?>?<?php echo $query_str ?>">&laquo; <?php echo $older_item['header_title'] ?></a>
+<?php
+  } else {
+?>
+    <div class='page_nav_older page_nav_inactive'>
+      &laquo; At oldest post
+<?php
+  }
+
+?>
+    </div> <!-- page_nav_older -->
+    <div class='page_nav_home'>
+      <a href="<?php echo $__config['blog_url'] ?>">Home</a>
+    </div> <!-- page_nav -->
+<?php
+  //
+  // Display 'Newer Post' link
+  //
+  if ($newer_item != FALSE) {
+    $__query_params['post'] = $newer_item['data_file'];
+    $query_str = http_build_query($__query_params);
+?>
+    <div class='page_nav_newer page_nav_active'>
+      <a href="<?php echo $__config['blog_url'] ?>?<?php echo $query_str ?>"><?php echo $newer_item['header_title'] ?> &laquo;</a>
+<?php
+  } else {
+?>
+    <div class='page_nav_newer page_nav_inactive'>
+      At newest post &raquo;
+<?php
+  }
+?>
+    </div> <!-- page_nav_newer -->
+  </div> <!-- page_nav -->
+  <br class='clear'>
+<?php
+}
+function show_list_page_nav () {
   global $__blog_data_items, $__query_params;
   global $__status, $__config;
 
@@ -312,17 +387,28 @@ function tagged_posts ($data_item) {
   return in_array ($__status['tag'], $data_item['header_tags']);
 }
 
-function refine_data_items () {
-  global $__blog_data_items;
+function get_item_key ($data_item) {
   global $__status;
 
+  return $data_item['time'];
+}
+
+function refine_data_items () {
+  global $__blog_data_items, $__selected_item_keys;
+  global $__status;
+
+  $refined_data_items = $__blog_data_items;
+
   if ($__status['page_type'] == 'single_post') {
-    $__blog_data_items = array_filter ($__blog_data_items, 'single_post');
+    $refined_data_items = array_filter ($__blog_data_items, 'single_post');
   } elseif ($__status['page_type'] == 'tagged_posts') {
-    $__blog_data_items = array_filter ($__blog_data_items, 'tagged_posts');
+    $refined_data_items = array_filter ($__blog_data_items, 'tagged_posts');
   } else {
     // All posts
   }
+
+  $__selected_item_keys = array_map ('get_item_key', $refined_data_items);
+  $__status['debug'] .= "  /**/ After mapping refined " . count($__selected_item_keys) . " items to display\n";
 }
 
 //

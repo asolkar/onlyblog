@@ -27,25 +27,27 @@ function http_doc_type() {
 function page_header () {
   global $__status, $__config;
 
-  echo <<<END
+?>
     <div id="page_header">
-      <div id="blog_name"><a href="{$__config['blog_url']}" title="Go to blog home"><h1>{$__config['blog_name']}</h1></a></div>
-      <div id="blog_tag_line"><h2>{$__config['blog_tag_line']}</h3></div>
+      <div id="blog_name"><a href="<?php echo "{$__config['blog_url']}" ?>"
+                             title="Go to blog home"><h1><?php echo "{$__config['blog_name']}" ?></h1></a></div>
+      <div id="blog_tag_line"><h2><?php echo "{$__config['blog_tag_line']}" ?></h3></div>
     </div>
-END;
+<?php
 }
+
 function page_footer () {
   global $__status, $__config;
 
-  echo <<<END
+?>
     <!-- DEBUG:
-{$__status['debug']} -->
+<?php echo "{$__status['debug']}" ?> -->
     <div id="page_footer">
-      <a href="{$__config['blog_url']}">{$__config['blog_name']}</a> is
+      <a href="<?php echo "{$__config['blog_url']}" ?>"><?php echo "{$__config['blog_name']}" ?></a> is
       an <a href="http://github.com/asolkar/onlyblog/">OnlyBlog</a> blog
       using the Serene theme.
     </div>
-END;
+<?php
 }
 
 function show_page () {
@@ -53,14 +55,14 @@ function show_page () {
 
   get_post_list();
 
-  echo <<<END
+?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="alternate" type="application/rss+xml"
-        href="{$__config['blog_url']}/feed.php"
-        title="{$__config['blog_name']} feed" />
-  <link rel="StyleSheet" href="{$__config['theme_dir']}/{$__config['css_file']}"
+        href="<?php echo "{$__config['blog_url']}" ?>/feed.php"
+        title="<?php echo "{$__config['blog_name']}" ?> feed" />
+  <link rel="StyleSheet" href="<?php echo "{$__config['theme_dir']}" ?>/<?php echo "{$__config['css_file']}" ?>"
         type="text/css" title="Serene Design Style">
 
   <script type="text/javascript" language="javascript" src="Library.js" />
@@ -74,12 +76,12 @@ function show_page () {
 
   </script>
 
-  <title>{$__status['page_title']}</title>
+  <title><?php echo "{$__status['page_title']}" ?></title>
 
   </head>
 <body>
 <div id='shrink_wrapper'>
-END;
+<?php
 
   page_header();
 
@@ -87,9 +89,9 @@ END;
 
   page_footer();
 
-  echo <<<END
+?>
 </div> <!-- shrink_wrapper -->
-END;
+<?php
 
   if (isset ($__config['intensedebate_blog_acct'])) {
     echo intense_debate_cmt_cnt_stub ("");
@@ -97,11 +99,9 @@ END;
   if (isset ($__config['disqus_blog_acct'])) {
     echo disqus_cmt_cnt_stub ("{$__config['blog_url']}?post={$data_item['data_file']}");
   }
-
-
-  echo <<<END
+?>
 </body>
 </html>
-END;
+<?php
 }
 ?>

@@ -174,18 +174,20 @@ a:hover {
 .page_nav_newer,
 .page_nav_home,
 .page_nav_older {
-  width : 33%;
   float : left;
   display : inline;
 }
 
 .page_nav_newer {
+  width : 40%;
   text-align : right;
 }
 .page_nav_home {
+  width : 20%;
   text-align : center;
 }
 .page_nav_older {
+  width : 40%;
   text-align : left;
 }
 
