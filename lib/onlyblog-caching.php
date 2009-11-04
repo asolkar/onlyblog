@@ -67,7 +67,11 @@ function set_stored_sha1 ($sha1_value) {
 function is_blog_data_changed () {
   global $__status, $__config;
 
-  return (get_data_sha1() != get_stored_sha1());
+  if (function_exists ('hash_init')) {
+    return (get_data_sha1() != get_stored_sha1());
+  } else {
+    return 1;
+  }
 }
 function is_cache_stale () {
   $cache_file = $__config['blog_data_dir'] . '/' . $__config['cache_file'];
@@ -90,7 +94,9 @@ function update_cache_file () {
 
   file_put_contents ($cache_file, serialize ($__blog_data_items), LOCK_EX);
 
-  set_stored_sha1 (get_data_sha1());
+  if (function_exists ('hash_init')) {
+    set_stored_sha1 (get_data_sha1());
+  }
 
   $__status['debug'] .= "  /**/ Updated cache\n";
 }
