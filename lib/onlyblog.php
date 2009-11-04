@@ -201,10 +201,10 @@ function show_single_post_page_nav () {
 <?php
 }
 function show_list_page_nav () {
-  global $__blog_data_items, $__query_params;
+  global $__blog_data_items, $__query_params, $__selected_item_keys;
   global $__status, $__config;
 
-  $data_keys = array_keys($__blog_data_items);
+  $data_keys = array_keys($__selected_item_keys);
   $last_post_id = ($__status['page_start'] + $__config['posts_per_page']);
 
 ?>
