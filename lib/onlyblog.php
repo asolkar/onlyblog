@@ -117,16 +117,78 @@ function show_post_list() {
 ?>
   </div><!-- entry_list -->
 <?php
-  if (sizeof($data_keys) > ($last_post_id+1)) {
+  show_page_nav ();
+}
+
+//
+// Show pagination links.
+// - If in list display mode, show 'older'/'newer' links
+// - If in single post mode, show 'previous title'/'next title' links [TODO]
+//
+function show_page_nav () {
+  global $__blog_data_items, $__query_params;
+  global $__status, $__config;
+
+  $data_keys = array_keys($__blog_data_items);
+  $last_post_id = ($__status['page_start'] + $__config['posts_per_page']);
+
+?>
+  <br class='clear'>
+  <div class='page_nav'>
+<?php
+  //
+  // Display 'Older Posts' link
+  //
+  if (sizeof($data_keys) > ($last_post_id)) {
     //
     // More posts to display
     //
-    $__query_params['fp'] = $last_post_id+1;
+    $__query_params['fp'] = $last_post_id;
     $query_str = http_build_query($__query_params);
 ?>
-    <a href="<?php echo $__config['blog_url'] ?>?<?php echo $query_str ?>">Next</a>
+    <div class='page_nav_older page_nav_active'>
+      <a href="<?php echo $__config['blog_url'] ?>?<?php echo $query_str ?>">&laquo; Older Posts</a>
+<?php
+  } else {
+?>
+    <div class='page_nav_older page_nav_inactive'>
+      &laquo; Older Posts
 <?php
   }
+
+?>
+    </div> <!-- page_nav_older -->
+    <div class='page_nav_home'>
+      <a href="<?php echo $__config['blog_url'] ?>">Home</a>
+    </div> <!-- page_nav -->
+<?php
+  //
+  // Display 'Older Posts' link
+  //
+  if ($__status['page_start'] > 0) {
+    //
+    // More posts to display
+    //
+    $__query_params['fp'] = $__status['page_start'] - $__config['posts_per_page'];
+    if ($__query_params['fp'] <= 0 ) {
+      unset ($__query_params['fp']);
+    }
+    $query_str = http_build_query($__query_params);
+?>
+    <div class='page_nav_newer page_nav_active'>
+      <a href="<?php echo $__config['blog_url'] ?>?<?php echo $query_str ?>">Newer Posts &raquo;</a>
+<?php
+  } else {
+?>
+    <div class='page_nav_newer page_nav_inactive'>
+      Newer Posts &raquo;
+<?php
+  }
+?>
+    </div> <!-- page_nav_newer -->
+  </div> <!-- page_nav -->
+  <br class='clear'>
+<?php
 }
 
 function show_data_item ($data_item) {
@@ -147,17 +209,17 @@ function show_data_item ($data_item) {
   //
   // Display the post
   //
-  echo <<<END
+?>
   <div class='entry'>
     <div class='entry_header'>
-      $header
+      <?php echo $header ?>
     </div><!-- entry_header -->
     <br class="header_body_separator">
     <div class='entry_body'>
-      $entry
+      <?php echo $entry ?>
     </div><!-- entry_body -->
   </div><!-- entry -->
-END;
+<?php
 
   if (isset ($__config['intensedebate_blog_acct'])) {
     if ($__status['page_type'] == 'single_post') {
