@@ -33,6 +33,11 @@ body {
   border-bottom : thin solid #eeeeee;
 }
 
+br.clear {
+  clear : both;
+  padding : 3px;
+}
+
 a, a:visited {
   text-decoration : none;
   color : #558855;
@@ -157,6 +162,33 @@ a:hover {
 .header_body_separator {
   clear : both;
   padding : 3px;
+}
+
+/* Page navigation */
+.page_nav {
+  width : 99%;
+  display : block;
+  margin : 0px 0px 20px 0px;
+}
+
+.page_nav_newer,
+.page_nav_home,
+.page_nav_older {
+  float : left;
+  display : inline;
+}
+
+.page_nav_newer {
+  width : 40%;
+  text-align : right;
+}
+.page_nav_home {
+  width : 20%;
+  text-align : center;
+}
+.page_nav_older {
+  width : 40%;
+  text-align : left;
 }
 
 /* Entry formatting */
