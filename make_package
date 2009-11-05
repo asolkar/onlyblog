@@ -1,0 +1,6 @@
+tar -C .. \
+    -zcvf onlyblog-0.1.tar.gz \
+    onlyblog \
+    --no-same-owner \
+    --exclude-from package.excl \
+    --exclude "*.tar.*"
