@@ -23,9 +23,7 @@ include $__config['theme_dir'] . "/theme.php";
 
 blog_init();
 
-sanity_check();
-
-if ($__status['blog_setup_ok'] == 1) {
+if (sanity_check() == 1) {
   show_page();
 } else {
   show_setup_help_page();
