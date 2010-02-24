@@ -16,6 +16,8 @@
 
 */
 
+@import "../reset.css";
+
 /* Style for PHP Labs */
 body {
   font-family : Georgia, "Bitstream Vera Serif", "Times New Roman", serif;
@@ -23,12 +25,14 @@ body {
   line-height : 1.7em;
   background-color : white;
   background : url(images/back.png) top center no-repeat;
+  margin-top : 0px;
+  top: 0px;
 }
 
 #shrink_wrapper {
-  width : 600px;
+  position : relative;
+  width : 620px;
   margin : 0 auto;
-  text-align : left;
   padding-bottom : 10px;
   border-bottom : thin solid #eeeeee;
 }
@@ -61,7 +65,7 @@ a:hover {
 #page_header a,
 #page_header h1 {
   font-family : "Trebuchet MS", sans-serif;
-  text-align : center;
+  text-align : left;
   font-size : xx-large;
   font-weight : bold;
   line-height : 1.8em;
@@ -70,12 +74,16 @@ a:hover {
 }
 #page_header h2 {
   font-family : "Trebuchet MS", sans-serif;
-  text-align : center;
+  text-align : left;
   font-size : medium;
   font-weight : bold;
   font-style : italic;
   line-height : 1.5em;
   color : white;
+}
+
+#page_header {
+  margin-bottom : 10px;
 }
 
 .entry_header {
@@ -201,7 +209,18 @@ a:hover {
   margin : 10px;
   padding : 5px 10px 5px 10px;
 }
+.entry p {
+  padding-top : 1em;
+}
+.entry strong {
+  font-weight : bold;
+}
+.entry em {
+  font-style : italic;
+}
+
 pre {
+  font-family : monospace;
   border : thin dashed #cccccc;
   background-color : #eeeeee;
   margin : 10px;
@@ -234,3 +253,31 @@ pre {
 a img {
   border : none;
 }
+
+/* Search box */
+#ob_search {
+  position : absolute;
+  top : 0px;
+  right : -10%;
+  width : 250px;
+  height : 30px;
+  background : url(images/search_bar.png) no-repeat;
+}
+
+#ob_search #search_text {
+  background : transparent;
+  padding-left : 6px;
+  padding-top : 6px;
+  border : none;
+  color : white;
+}
+
+#ob_search #search_button {
+  background : url(icons/magnifier.png) bottom right no-repeat;
+  border : none;
+}
+
+.obs_highlight {
+  background : yellow;
+}
+
