@@ -41,6 +41,7 @@ function blog_init () {
   //
   // Handle requests
   //
+  $__status['debug'] .= "  /**/ Handling requests\n";
   if (isset ($_GET['post'])) {
     $__status['page_type'] = 'single_post';
     $__status['data_file'] = $_GET['post'];
@@ -48,6 +49,11 @@ function blog_init () {
     $__status['page_type'] = 'tagged_posts';
     $__status['tag'] = $_GET['tag'];
     $__query_params['tag'] = $_GET['tag'];
+  } elseif (isset ($_GET['q'])) {
+    $__status['page_type'] = 'searched_posts';
+    $__status['obs_q'] = $_GET['q'];
+    $__query_params['q'] = $_GET['q'];
+    $__status['debug'] .= "  /**/ Looking for posts with " . $__status['obs_q'] . "\n";
   } else {
     if (isset ($_POST['action'])) {
     } else {
@@ -152,13 +158,20 @@ function show_post_list() {
   // Using for loop instead of foreach, for easier pagination
   //
   $data_keys = array_keys($__selected_item_keys);
-  for ($post_id = 0; $post_id < sizeof($data_keys); $post_id ++) {
-    if (($post_id >= $__status['page_start'])
-        && ($post_id < ($__status['page_start'] + $__config['posts_per_page']))) {
-      $data_item = $__blog_data_items[$data_keys[$post_id]];
-      show_data_item ($data_item);
-      $__status['debug'] .= "  /**/ Showing $post_id (key={$data_keys[$post_id]})\n";
-      $last_post_id = $post_id;
+
+  if (sizeof ($data_keys) == 0) {
+?>
+  No entries found! Go <a href="<?php echo $__config['blog_url'] ?>">home</a>?
+<?php
+  } else {
+    for ($post_id = 0; $post_id < sizeof($data_keys); $post_id ++) {
+      if (($post_id >= $__status['page_start'])
+          && ($post_id < ($__status['page_start'] + $__config['posts_per_page']))) {
+        $data_item = $__blog_data_items[$data_keys[$post_id]];
+        show_data_item ($data_item);
+        $__status['debug'] .= "  /**/ Showing $post_id (key={$data_keys[$post_id]})\n";
+        $last_post_id = $post_id;
+      }
     }
   }
 ?>
@@ -322,6 +335,12 @@ function show_data_item ($data_item) {
   if ($__config['transform_text'] == 1) {
     $entry = transform_text ($data_item['entry']);
   }
+  if ($__status['page_type'] == 'searched_posts') {
+    //
+    // FIXME: This is not trivial. Figure out solution.
+    //
+    // $entry = highlight_search_terms ($__status['obs_q'], $entry);
+  }
 
   //
   // Get the display version of the raw header text
@@ -362,6 +381,12 @@ function show_data_item ($data_item) {
 
 function transform_text ($entry) {
   $entry = preg_replace ('/\n\n/', "\n<p>", $entry);
+
+  return $entry;
+}
+
+function highlight_search_terms ($terms, $entry) {
+  $entry = preg_replace ('/(' . $terms . ')/', "<span class=\"obs_highlight\">$1</span>", $entry);
 
   return $entry;
 }
@@ -434,6 +459,12 @@ function tagged_posts ($data_item) {
   return in_array ($__status['tag'], $data_item['header_tags']);
 }
 
+function searched_posts ($data_item) {
+  global $__status;
+
+  return preg_match ('/' . $__status['obs_q'] . '/i', $data_item['entry']);
+}
+
 function get_item_key ($data_item) {
   global $__status;
 
@@ -450,6 +481,8 @@ function refine_data_items () {
     $refined_data_items = array_filter ($__blog_data_items, 'single_post');
   } elseif ($__status['page_type'] == 'tagged_posts') {
     $refined_data_items = array_filter ($__blog_data_items, 'tagged_posts');
+  } elseif ($__status['page_type'] == 'searched_posts') {
+    $refined_data_items = array_filter ($__blog_data_items, 'searched_posts');
   } else {
     // All posts
   }
@@ -589,4 +622,25 @@ function show_setup_help_page() {
 <?php
 }
 
+//
+// Search related functions
+//
+function search_stub () {
+  global $__status, $__config;
+
+  $output = "";
+
+$output .= <<<END
+<div id="ob_search">
+  <form method="get" action="{$__config['blog_url']}">
+    <div>
+      <input type="text" id="search_text" name="q" size="25">
+      <input type="submit" id="search_button" class="button" name="s" value="">
+    </div>
+  </form>
+</div>
+END;
+
+  return $output;
+}
 ?>
