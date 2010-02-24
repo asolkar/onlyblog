@@ -29,7 +29,8 @@ function find_blog_data_files () {
   //
   // Find blog data files in $__config['blog_data_dir'] as specified in the
   // blog configuration. A blog data file is any file in this directory that is
-  // of type 'file', is readable and has an extension '.blog'
+  // of type 'file', is readable and has an extension as defined in
+  // $__config['post_file_extension']
   //
   if (is_dir($data_dir)) {
     if ($dh = opendir($data_dir)) {
@@ -37,7 +38,7 @@ function find_blog_data_files () {
         $data_file = $data_dir . '/' . $file;
         if (is_file($data_file)
             && is_readable($data_file)
-            && preg_match('/\.blog$/', $file)) {
+            && preg_match('/\.' . $__config['post_file_extension'] . '$/', $file)) {
 
           $data_item = array ();
 
