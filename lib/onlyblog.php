@@ -35,6 +35,8 @@ function blog_init () {
   $__status['page_title'] = $__config['blog_name'];
   $__status['debug'] = '';
   $__status['page_start'] = 0;
+  $__status['blog_setup_ok'] = 1;
+  $__status['setup_help'] = '';
 
   //
   // Handle requests
@@ -62,6 +64,51 @@ function blog_init () {
     $__status['page_start'] = $_GET['fp'];
     $__status['debug'] .= "  /**/ Starting with post " . $__status['page_start'] . "\n";
   }
+}
+
+function sanity_check() {
+  global $__status, $__config;
+
+  //
+  // Check the following to make sure blog is setup right:
+  // * 'blog_data_dir' exists and has right privileges
+  // * 'blog_data_dir/meta' dir exists and has right privileges
+  //
+
+  if (!file_exists ($__config['blog_data_dir'])) {
+    //
+    // Blog data directory does not exist
+    //
+    $__status['blog_setup_ok'] = 0;
+    $__status['setup_help'] .= "* <b>blog_data_dir</b> does not exist<br>";
+  } else {
+    //
+    // Blog data directory exists, but does it have right permissions?
+    //
+    if (!is_readable ($__config['blog_data_dir'])) {
+      $__status['blog_setup_ok'] = 0;
+      $__status['setup_help'] .= "* <b>blog_data_dir</b> exists but is not readable<br>";
+    }
+  }
+
+  $meta_dir = $__config['blog_data_dir'] . '/meta';
+
+  if (!file_exists ($meta_dir)) {
+    //
+    // Blog data directory does not exist
+    //
+    $__status['blog_setup_ok'] = 0;
+    $__status['setup_help'] .= "* <b>blog_data_dir/meta</b> does not exist<br>";
+  } else {
+    //
+    // Blog data directory exists, but does it have right permissions?
+    //
+    if (!is_writable ($meta_dir)) {
+      $__status['blog_setup_ok'] = 0;
+      $__status['setup_help'] .= "* <b>blog_data_dir/meta</b> exists but is not writable<br>";
+    }
+  }
+  return $__status['blog_setup_ok'];
 }
 
 function get_post_list() {
@@ -524,6 +571,55 @@ function disqus_cmt_cnt_stub ($post_url) {
 END;
 
   return $output;
+}
+
+function show_setup_help() {
+  global $__status, $__config;
+?>
+  <div class='entry_list'> <!-- page_type = <?php echo $__status['page_type'] ?> -->
+  <?php echo $__status['setup_help'] ?>
+  </div>
+<?php
+}
+
+function show_setup_help_page() {
+  global $__status, $__config;
+
+  $__status['page_title'] = "OnlyBlog setup help";
+?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="alternate" type="application/rss+xml"
+        href="<?php echo "{$__config['blog_url']}" ?>/feed.php"
+        title="<?php echo "{$__config['blog_name']}" ?> feed" />
+  <link rel="StyleSheet" href="<?php echo "{$__config['theme_dir']}" ?>/<?php echo "{$__config['css_file']}" ?>"
+        type="text/css" title="Serene Design Style">
+
+  <script type="text/javascript" language="javascript" src="Library.js" />
+  <script type="text/javascript">
+  //<![CDATA[
+  //]]>
+  </script>
+
+  <title><?php echo "{$__status['page_title']}" ?></title>
+
+</head>
+<body>
+<div id='shrink_wrapper'>
+<?php
+
+  page_header();
+
+  show_setup_help();
+
+  page_footer();
+
+?>
+</div> <!-- shrink_wrapper -->
+</body>
+</html>
+<?php
 }
 
 //

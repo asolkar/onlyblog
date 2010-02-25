@@ -23,5 +23,9 @@ include $__config['theme_dir'] . "/theme.php";
 
 blog_init();
 
-show_page();
+if (sanity_check() == 1) {
+  show_page();
+} else {
+  show_setup_help_page();
+}
 ?>
