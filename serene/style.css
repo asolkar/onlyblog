@@ -23,25 +23,25 @@ body {
   font-family : Georgia, "Bitstream Vera Serif", "Times New Roman", serif;
   font-size : small;
   line-height : 1.7em;
-  background-color : white;
-  background : url(images/back.png) top center no-repeat;
   margin : 0 0 0 0;
   top: 0px;
   overflow : auto;
+  width : 100%;
+  height : 100%;
 }
 
 #shrink_wrapper_shell {
   display: block;
   /*position : fixed;*/
-  width : 100%;
-  height : 100%;
   margin : 0 auto;
   text-align : center;
+  background-color : white;
+  background : url(images/back.png) top center no-repeat;
 }
 #shrink_wrapper {
   position : relative;
-  display : inline-block;
-  width : 620px;
+  display : block;
+  width : 720px;
   margin : 0 auto;
   margin-left : auto;
   margin-right : auto;
@@ -64,7 +64,7 @@ a:hover {
 }
 
 .entry_list {
-  width : 620px;
+  width : 720px;
   margin : 0 auto;
   border-top : 3px solid #eeeeee;
   text-align : left;
@@ -225,6 +225,14 @@ a:hover {
   margin : 10px;
   padding : 5px 10px 5px 10px;
 }
+.entry h2 {
+  font-family : "Trebuchet MS", sans-serif;
+  text-align : left;
+  font-size : medium;
+  font-weight : bold;
+  font-style : italic;
+  line-height : 1.5em;
+}
 .entry p {
   padding-top : 1em;
 }
@@ -233,6 +241,24 @@ a:hover {
 }
 .entry em {
   font-style : italic;
+}
+
+.entry ul,
+.entry ol {
+  list-style-position : outside;
+  margin-left : 1.4em;
+}
+
+.entry li {
+  padding-left : 0.2em;
+  padding-bottom : 0.5em;
+}
+
+.entry ul {
+  list-style-type : disc;
+}
+.entry ol {
+  list-style-type : decimal;
 }
 
 pre {
