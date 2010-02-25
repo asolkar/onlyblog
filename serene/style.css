@@ -227,6 +227,10 @@ pre {
   padding : 5px 10px 5px 10px;
 }
 
+code {
+  font-family : monospace;
+}
+
 /* Serene theme related formatting */
 #page_footer {
   font-family : "Trebuchet MS", sans-serif;
