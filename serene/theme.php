@@ -81,6 +81,7 @@ function show_page () {
 
   </head>
 <body>
+<div id='shrink_wrapper_shell'>
 <div id='shrink_wrapper'>
 <?php
 
@@ -101,6 +102,7 @@ function show_page () {
     echo disqus_cmt_cnt_stub ("{$__config['blog_url']}?post={$data_item['data_file']}");
   }
 ?>
+</div> <!-- shrink_wrapper_shell -->
 </body>
 </html>
 <?php

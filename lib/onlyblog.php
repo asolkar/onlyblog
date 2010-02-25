@@ -355,7 +355,7 @@ function show_data_item ($data_item) {
     <div class='entry_header'>
       <?php echo $header ?>
     </div><!-- entry_header -->
-    <br class="header_body_separator">
+    <hr class="header_body_separator">
     <div class='entry_body'>
       <?php echo $entry ?>
     </div><!-- entry_body -->
