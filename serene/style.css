@@ -25,14 +25,26 @@ body {
   line-height : 1.7em;
   background-color : white;
   background : url(images/back.png) top center no-repeat;
-  margin-top : 0px;
+  margin : 0 0 0 0;
   top: 0px;
+  overflow : auto;
 }
 
+#shrink_wrapper_shell {
+  display: block;
+  /*position : fixed;*/
+  width : 100%;
+  height : 100%;
+  margin : 0 auto;
+  text-align : center;
+}
 #shrink_wrapper {
   position : relative;
+  display : inline-block;
   width : 620px;
   margin : 0 auto;
+  margin-left : auto;
+  margin-right : auto;
   padding-bottom : 10px;
   border-bottom : thin solid #eeeeee;
 }
@@ -52,7 +64,7 @@ a:hover {
 }
 
 .entry_list {
-  width : 600px;
+  width : 620px;
   margin : 0 auto;
   border-top : 3px solid #eeeeee;
   text-align : left;
@@ -71,6 +83,7 @@ a:hover {
   line-height : 1.8em;
   color : white;
   text-decoration : none;
+  background : transparent;
 }
 #page_header h2 {
   font-family : "Trebuchet MS", sans-serif;
@@ -83,12 +96,13 @@ a:hover {
 }
 
 #page_header {
+  display : block;
   margin-bottom : 10px;
 }
 
 .entry_header {
   font-family : "Trebuchet MS", sans-serif;
-  border-bottom : thin solid #eeeeee;
+  /*border-bottom : thin solid #eeeeee;*/
   overflow : auto;
   margin : 0 auto;
   padding-bottom : 10px;
@@ -169,7 +183,9 @@ a:hover {
 
 .header_body_separator {
   clear : both;
-  padding : 3px;
+  padding : 1px;
+  border : none;
+  border-top : thin solid #ececec;
 }
 
 /* Page navigation */
