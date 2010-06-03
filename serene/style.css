@@ -219,6 +219,37 @@ a:hover {
 .entry {
   padding-top : 10px;
 }
+.entry h2,
+.entry h3,
+.entry h4,
+.entry h5 {
+  font-family : "Trebuchet MS", sans-serif;
+  margin-bottom : 0.5em;
+  margin-top : 0.5em;
+  font-weight : bold;
+}
+.entry h2 {
+  font-size : 150%;
+}
+.entry h3 {
+  font-size: 140%;
+}
+.entry h4 {
+  font-size: 130%;
+}
+.entry h5 {
+  font-size: 120%;
+}
+.entry ul {
+  list-style : disc;
+  padding : 1em;
+  margin : 0.5em;
+}
+.entry ol {
+  list-style : decimal;
+  padding : 1em;
+  margin : 0.5em;
+}
 .entry blockquote {
   font-family : "Trebuchet MS", sans-serif;
   border-left : 5px solid #cccccc;
