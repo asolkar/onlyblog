@@ -56,6 +56,7 @@ function show_page () {
 
   get_post_list();
 
+  http_doc_type();
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
