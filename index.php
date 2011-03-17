@@ -17,8 +17,11 @@
 // Include library of functions
 //
 include 'lib/config.inc';
-include 'config.inc';
 include 'lib/onlyblog.php';
+
+check_config_inc();
+
+include 'config.inc';
 include $__config['theme_dir'] . "/theme.php";
 
 blog_init();

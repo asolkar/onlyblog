@@ -643,4 +643,24 @@ END;
 
   return $output;
 }
+
+//
+// Check for existence of config.inc file in installation directory
+//
+function check_config_inc () {
+  if (!file_exists ('config.inc')) {
+?>
+  <html>
+  <head>
+  <title>OnlyBlog Setup</title>
+  </head>
+  <body>
+    <h1>OnlyBlog Setup</h1>
+    <b><code>config.inc</code></b> file does not exist. This is a required file. Use <code>sample-config.inc</code> as a reference to create one.<br>
+  </body>
+  </html>
+  <?php
+    exit();
+  }
+}
 ?>
